@@ -1,34 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { Fragment, useState } from 'react'
+import Button from '@/components/Button';
+import Container from '@/components/Container';
+import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
+import GetToken from '@/modules/GetToken';
 
-function App() {
+const App = (): JSX.Element => {
   const [count, setCount] = useState(0)
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <Fragment>
+
+      <Navbar />
+
+      <main>
+        <section className='py-12'>
+          <Container>
+            <div className="">
+              <div className='text-[#154576] text-uppercase font-medium text-3xl text-center'>
+                ONEEX
+                EXCHANGE OF TOMORROW
+              </div>
+              <div className="text-center">
+                oneex is licened trading platform to cryptocurrencies & assets, built on vanguard security infrastructure and revolutionary reward system
+              </div>
+              <div className="">
+                <input type="text" />
+                <Button className="bg-red-500">
+                  Create account
+                </Button>
+              </div>
+            </div>
+          </Container>
+        </section>
+        <GetToken />
+      </main>
+
+      <Footer />
+
+    </Fragment>
   )
-}
+};
 
 export default App
