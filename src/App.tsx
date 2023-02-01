@@ -4,6 +4,7 @@ import Container from '@/components/Container';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import GetToken from '@/modules/GetToken';
+import Counter from '@/modules/Counter';
 
 const App = (): JSX.Element => {
   const [count, setCount] = useState(0)
@@ -33,6 +34,7 @@ const App = (): JSX.Element => {
             </div>
           </Container>
         </section>
+        <Counter/>
         <GetToken />
       </main>
 

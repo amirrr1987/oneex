@@ -2,7 +2,7 @@ import Button from "@/components/Button"
 import Container from "@/components/Container"
 const GetToken = (props: any) => {
     return (
-        <section className="bg-[#6a89cc] py-12">
+        <section className="bg-primary-400 py-12">
             <Container>
                 <div className="flex flex-col  gap-y-4 text-white">
                     <div className="text-center text-3xl font-bold capitalize">
