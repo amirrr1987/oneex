@@ -1,6 +1,6 @@
 import Container from "@/components/Container"
 
-const Footer = () => {
+const TheFooter = () => {
     return (
         <footer className='bg-[#666] py-12'>
             <Container>
@@ -31,4 +31,4 @@ const Footer = () => {
         </footer>
     )
 }
-export default Footer
+export default TheFooter
