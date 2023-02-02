@@ -5,8 +5,8 @@ const GetToken = (props: any) => {
         <section className="bg-primary-400 py-12">
             <Container>
                 <div className="flex flex-col  gap-y-4 text-white">
-                    <div className="text-center text-3xl font-bold capitalize">
-                        tic token
+                    <div className="text-center text-3xl font-bold">
+                        TIC Token
                     </div>
                     <div className="text-center">
                         oneex has created a TIC token with the gobal of stimulating the growth of the platform,

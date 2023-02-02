@@ -21,11 +21,11 @@ const Footer = () => {
                         <li className=":uno: text-white">Blog</li>
                         <li className=":uno: text-white">Privacy</li>
                     </ul>
-                    <address>
+                    <address className="text-white text-center">
                         #88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890
                     </address>
-                    <div>+9821 88 77 66 55</div>
-                    <div className="">support@oneex.com</div>
+                    <div className="text-white text-center">+982188776655</div>
+                    <div className="text-white text-center">support@oneex.com</div>
                 </div>
             </Container>
         </footer>
