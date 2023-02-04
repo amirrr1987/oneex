@@ -4,7 +4,7 @@ import App from './App'
 import 'uno.css'
 import 'virtual:unocss-devtools'
 import 'antd/dist/reset.css';
-
+import './assets/styles/index.css'
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />

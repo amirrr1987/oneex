@@ -1,0 +1,13 @@
+.ant-btn-secondary {
+    color: #fff;
+    background-color: #50c2c6;
+    box-shadow: 0 2px 0 rgb(5 122 255 / 6%);
+}
+.ant-btn-secondary:not(:disabled):hover {
+    color: #fff;
+    background-color: #5ddbdf;
+}
+.ant-btn-secondary:not(:disabled):active {
+    color: #fff;
+    background-color: #47abae;
+}

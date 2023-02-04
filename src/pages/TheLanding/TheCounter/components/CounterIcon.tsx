@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
+import { Button} from "antd";
 
 const CounterIcon = (props: any) => {
     const [toggleClass, setToggleClass] = useState('')
@@ -10,14 +11,15 @@ const CounterIcon = (props: any) => {
     }
     return (
         <div className="bg-[#f3f3f3] rounded-full p-4 relative">
-            <div className=" border-4 border-solid border-primary rounded-full p-4 bg-[#f3f3f3]">
-                <div className="bg-primary text-white text-5xl p-4 rounded-full">
-                    <Icon className="text-5xl bg-primary" icon={props.iconName} />
+            <div className=" border-4 border-solid border-primary-700 rounded-full p-4 bg-[#f3f3f3] w-32 h-32">
+                <div className="text-5xl flex justify-center items-center bg-primary-700 text-white w-full h-full rounded-full">
+                    <Icon className="" icon={props.iconName} />
                 </div>
             </div>
-            <button onClick={refreshData} className={`absolute bg-[#f3f3f3] text-secondary text-xl p-1 rounded-full right-2 bottom-2 ${toggleClass}`}>
-                <Icon icon="material-symbols:refresh" />
-            </button>
+            <Button onClick={refreshData} type="default" shape='circle' className=':uno: bg-light-4 absolute right-4 bottom-4' icon={
+                <Icon className='text-secondary' fontSize={24} icon="material-symbols:refresh" />
+            }> 
+            </Button>
         </div>
     )
 }

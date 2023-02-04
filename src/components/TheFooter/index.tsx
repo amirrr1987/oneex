@@ -2,32 +2,36 @@ import Container from "@/components/Container"
 
 const TheFooter = () => {
     return (
-        <footer className='bg-[#666] py-12'>
-            <Container>
-                <div className="text-center grid gap-4">
-                    <ul>
-                        <li className=":uno: text-white">About</li>
-                        <li className=":uno: text-white">Security</li>
-                        <li className=":uno: text-white">Fee Structure</li>
-                        <li className=":uno: text-white">API docs</li>
-                        <li className=":uno: text-white">Support</li>
-                    </ul>
-                    <ul>
-
-                        <li className=":uno: text-white">Support</li>
-                        <li className=":uno: text-white">Cookie policy</li>
-                        <li className=":uno: text-white">Terms of use</li>
-                        <li className=":uno: text-white">CDX</li>
-                        <li className=":uno: text-white">Blog</li>
-                        <li className=":uno: text-white">Privacy</li>
-                    </ul>
-                    <address className="text-white text-center">
-                        #88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890
-                    </address>
-                    <div className="text-white text-center">+982188776655</div>
-                    <div className="text-white text-center">support@oneex.com</div>
-                </div>
-            </Container>
+        <footer>
+            <div className='bg-[#666] py-12'>
+                <Container>
+                    <div className="grid gap-4">
+                        <ul className="list-none m-0 p-0">
+                            <li className=":uno: text-white text-center">About</li>
+                            <li className=":uno: text-white text-center">Security</li>
+                            <li className=":uno: text-white text-center">Fee Structure</li>
+                            <li className=":uno: text-white text-center">API docs</li>
+                            <li className=":uno: text-white text-center">Support</li>
+                        </ul>
+                        <ul className="list-none m-0 p-0">
+                            <li className=":uno: text-white text-center">Support</li>
+                            <li className=":uno: text-white text-center">Cookie policy</li>
+                            <li className=":uno: text-white text-center">Terms of use</li>
+                            <li className=":uno: text-white text-center">CDX</li>
+                            <li className=":uno: text-white text-center">Blog</li>
+                            <li className=":uno: text-white text-center">Privacy</li>
+                        </ul>
+                        <address className="text-white text-center font-normal text-sm ">
+                            #88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890
+                        </address>
+                        <div className="text-white text-center">+982188776655</div>
+                        <div className="text-white text-center">support@oneex.com</div>
+                    </div>
+                </Container>
+            </div>
+            <div className="text-center font-light text-xs py-4 bg-[#313131] text-light">
+                <span>©Copyright 2018. oneex. All Rights Resevd</span>
+            </div>
         </footer>
     )
 }

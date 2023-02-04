@@ -1,4 +1,4 @@
-import { Button, Input,Form } from "antd"
+import { Button, Input, Form } from "antd"
 import Container from "@/components/Container"
 
 const LOneex = () => {
@@ -16,9 +16,9 @@ const LOneex = () => {
                     <div className="f">
                         <Form className="flex flex-col gap-y-0">
                             <Form.Item className="flex-1 mb-4">
-                            <Input type="text" />
+                                <Input type="text" />
                             </Form.Item>
-                            <Button type="primary" className="bg-accent"> Create account</Button>
+                            <Button type="default"> Create account</Button>
                         </Form>
                     </div>
                 </div>

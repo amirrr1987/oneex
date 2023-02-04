@@ -6,6 +6,7 @@ import TheTable from '@/pages/TheLanding/TheTable';
 import TheCounter from '@/pages/TheLanding/TheCounter';
 import TheFeatures from '@/pages/TheLanding/TheFeatures';
 import TheGetToken from '@/pages/TheLanding/TheGetToken';
+import TheResponsive from '@/pages/TheLanding/TheResponsive';
 
 const TheLanding = (): JSX.Element => {
     return (
@@ -19,6 +20,7 @@ const TheLanding = (): JSX.Element => {
                 <TheFeatures />
                 <TheCounter />
                 <TheGetToken />
+                <TheResponsive />
             </main>
 
             <Footer />

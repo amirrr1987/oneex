@@ -6,10 +6,10 @@ const TheNavbar = () => {
     return (
         <nav className='py-4 shadow'>
             <Container>
-                <div className="flex items-center justify-between">
-                    <img className='h-12' src={logoImg} alt="" />
-                    <Button type="secondary" className="">
-                        get oneex token free
+                <div className="flex items-center justify-between gap-x-4">
+                    <img className='h-auto w-24' src={logoImg} alt="" />
+                    <Button type="default">
+                        Get free token
                     </Button>
                 </div>
             </Container>
