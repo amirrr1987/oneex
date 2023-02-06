@@ -22,6 +22,7 @@ function App() {
       theme={{
         token: {
           colorPrimary: '#6b89ca',
+          // colorPrimary: '#50c2c6',
           controlHeight: 40,
           borderRadius: 4
         },

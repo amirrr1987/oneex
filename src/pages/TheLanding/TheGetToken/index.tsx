@@ -19,7 +19,7 @@ const GetToken = (props: any) => {
                         <li>Get more cashback from invited users.</li>
                     </ul>
                     <div className=":uno: self-center">
-                        <Button type="default">
+                        <Button type="primary">
                             Get TIC Token
                         </Button>
                     </div>

@@ -1,4 +1,4 @@
-.ant-btn-secondary {
+/* .ant-btn-secondary {
     color: #fff;
     background-color: #50c2c6;
     box-shadow: 0 2px 0 rgb(5 122 255 / 6%);
@@ -10,4 +10,19 @@
 .ant-btn-secondary:not(:disabled):active {
     color: #fff;
     background-color: #47abae;
+} */
+
+
+.bg-secondary:not(:disabled):active {
+    color: #fff;
+    background-color: #389aa1;
 }
+.bg-secondary:not(:disabled):hover {
+    color: #fff;
+    background-color: #77d4d4;
+}
+/* :where(.css-dev-only-do-not-override-490plb).ant-btn:not(:disabled):focus-visible {
+    outline: 2px solid #d1edeb;
+    outline-offset: 1px;
+    transition: outline-offset 0s, outline 0s;
+} */
