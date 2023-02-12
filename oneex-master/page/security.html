@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!------------------------------------------------------------------------>
+    <!-------------------------------- Meta Data ----------------------------->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Free Web tutorials">
+    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+    <meta name="author" content="Amir MAghami">
+    <link rel="icon" href="../img/nav/favicon.png" type="image/png">
+    <!-------------------------------- Meta Data ----------------------------->
+    <!------------------------------------------------------------------------>
+    <title>ONEEX</title>
+    <!------------------------------------------------------------------------>
+    <!---------------------------- Style Sheet Links ------------------------->
+    <link type="text/css" rel="stylesheet" href="../css/animate.css">
+    <link type="text/css" rel="stylesheet" href="../css/all.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/grid.css">
+    <link type="text/css" rel="stylesheet" href="../css/custom.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/xs.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/sm.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/md.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/lg.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/xl.min.css">
+    <!---------------------------- Style Sheet Links ------------------------->
+    <!------------------------------------------------------------------------>
+</head>
+
+<body>
+    <header class="animatedParent animateOnce mb-4">
+        <nav class="navbar navbar-expand-sm navbar-light shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../img/icon/icon-logo.svg" title="onex" alt="onex" class="logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item mr-2">
+                            <a class="nav-link border-pelorous text-pelorous rounded" href="exchange.html">Exchange</a>
+                        </li>
+                        <li class="nav-item dropdown mr-2">
+                            <a class="nav-link dropdown-toggle border-pelorous text-pelorous rounded" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Transaction
+                            </a>
+                            <div class="dropdown-menu border-pelorous" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item text-pelorous" href="deposit.html">Deposit</a>
+                                <a class="dropdown-item text-pelorous" href="withdraw.html">Withdraw</a>
+                                <a class="dropdown-item text-pelorous" href="withdraw-history.html">Withdraw History</a>
+                            </div>
+                        </li>
+                        <li class="nav-item mr-2">
+                            <a class="nav-link border-pelorous text-pelorous rounded" href="tarde-history.html">Trade History</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto content-center">
+                        <li class="nav-item dropdown mr-2">
+                            <a class="nav-link dropdown-toggle rounded bg-secondary content-center p-1 nav-icon" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="../img/icon/icon-profile.svg" width="20" alt="">
+                            </a>
+                            <div class="dropdown-menu border-pelorous" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item text-pelorous" href="profile.html">Profile</a>
+                                <a class="dropdown-item text-pelorous active-menu-black-50" href="security.html">Security</a>
+                                <a class="dropdown-item text-pelorous" href="lastteenlogin.html">Last 10 Login</a>
+                                <a class="dropdown-item text-pelorous" href="logout.html"><img src="img/icon/logout.svg" width="30" height="30" alt="">Logout</a>
+                            </div>
+                        </li>
+                        <li class="nav-item mr-2">
+                            <a class="nav-link bg-pelorous text-white rounded text-capitalize" href="blank.html"><span class="pr-5 pl-5">Get TIC Token</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="mt-5 pt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="text-uppercase text-center text-chathamsblue font-weight-bold mb-5">security!</h4>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col col-sm col-md-8 col-lg-6">
+                        <ul class="nav nav-tabs nav-fill shadow-sm">
+                            <li class="nav-item">
+                                <a class="nav-link bg-danube rounded-0 position-relative" href="profile.html">
+                                    <span class="text-uppercase text-white ">profile</span>
+                                    <div class="border_tab"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item d-none d-sm-block">
+                                <a class="nav-link bg-danube rounded-0 position-relative active" href="security.html">
+                                    <span class="text-uppercase text-white">security</span>
+                                    <div class="border_tab"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="bg-zircon pb-5 sign-section-height">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col col-md-8 col-lg-6">
+                        <div class="bg-white pt-4 pb-4 pr-5 pl-5 shadow">
+                            <form>
+                                <div class="form-group">
+                                    <input type="password" class="form-control font-weight-light font-size-14" id="passwordid" name="password" placeholder="Enter Current Password">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control font-weight-light font-size-14" id="compasswordid" name="compassword" placeholder="Enter New Password">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control font-weight-light font-size-14" id="compasswordid" name="compassword" placeholder="Repeat New Password">
+                                </div>
+                                <div class="form-group">
+                                    <div class=" row d-flex justify-content-center">
+                                        <button type="submit" onclick="checknull()" class="btn bg-pelorous shadow-sm text-white text-capitalize w-75 text-center mt-3">
+                                            Save Changes
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="bg-dovegray text-white pt-5 pb-3 ">
+            <div class="container">
+                <div class="row mb-3">
+                    <div class="col-12 col-sm text-center text-sm-right">
+                        <span class="d-block">About</span>
+                        <span class="d-block">Security</span>
+                        <span class="d-block">Fee Structure</span>
+                        <span class="d-block">API docs</span>
+                        <span class="d-block">Support</span>
+                    </div>
+                    <div class="col-12 col-sm-2 d-none d-sm-block">
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle mb-2" href=""><img class="d-block mr-auto ml-auto align-self-center" src="../img/asset/telegram.png" title="" alt=""></a>
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle mb-2" href=""><img class="d-block m-auto" src="../img/asset/whatsapp.png" title="" alt=""></a>
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle" href=""><img class="d-block m-auto" src="../img/asset/instagram.png" title="" alt=""></a>
+                    </div>
+                    <div class="col-12 col-sm text-center text-sm-left">
+                        <span class="d-block">Cookie policy</span>
+                        <span class="d-block">Terms of use</span>
+                        <span class="d-block">CDX</span>
+                        <span class="d-block">Blog</span>
+                        <span class="d-block">Privacy</span>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-sm-6 text-center">
+                        <address>#88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890</address>
+                        <span class="d-block text-center">+9821 88 77 66 55</span>
+                        <span class="d-block text-center">support@onex.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center pt-3 pb-3 d-sm-none">
+            <div class="col-6 ">
+                <ul class="list-inline content">
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/telegram.png" title="" alt=""></a></li>
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/whatsapp.png" title="" alt=""></a></li>
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/instagram.png" title="" alt=""></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="bg-mineshaft copyright text-white text-center font-weight-light pt-2 pb-2">
+            <span>&copy;Copyright 2018. ONEX. All Rights Resevd</span>
+        </div>
+    </footer>
+
+    <!------------------------------------------------------------------------>
+    <!------------------------------- Script Links --------------------------->
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/fontawesome.min.js"></script>
+    <script src="../js/animated.js"></script>
+    <script src="../js/custom.min.js"></script>
+    <!------------------------------- Script Links --------------------------->
+    <!------------------------------------------------------------------------>
+</body>
+
+</html>

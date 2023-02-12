@@ -15,10 +15,11 @@ import TheLanding from "@/pages/TheLanding";
 import TheAuth from '@/pages/TheAuth';
 import TheSignin from '@/pages/TheAuth/TheSignin';
 import TheSignup from '@/pages/TheAuth/TheSignup';
+import TheDashboard from '@/pages/TheDashboard'
 function App() {
   const [count, setCount] = useState(0);
   return (
-        <ConfigProvider
+    <ConfigProvider
       theme={{
         token: {
           colorPrimary: '#6b89ca',
@@ -31,10 +32,9 @@ function App() {
       <ListContextProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<TheLanding />}>
-            </Route>
-            {/* <Route path="/" element={<TheLandingPage />}>
-              <Route path="/" element={<TheHome />}></Route>
+            <Route path="/" element={<TheLanding />} />
+            <Route path="/exchange" element={<TheDashboard />} />
+            {/*  <Route path="/" element={<TheHome />}></Route>
               <Route
                 path="/products-list"
                 element={<TheProductsList />}

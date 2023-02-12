@@ -1,0 +1,618 @@
+::-webkit-scrollbar {
+    width: 12px;
+} 
+
+::-webkit-scrollbar-thumb {
+    background-color: #999;
+}
+
+::-webkit-scrollbar-track {
+}
+
+/*********************************************/
+.bg-indigo {
+    background-color: #4a69bc !important;
+}
+
+.bg-zircon {
+    background-color: #f3f7ff !important;
+}
+
+.bg-pelorous {
+    background-color: #4ac1c7 !important;
+}
+
+.bg-chathamsblue {
+    background-color: #154576 !important;
+}
+
+.bg-mineshaft {
+    background-color: #333 !important;
+}
+
+.bg-dovegray {
+    background-color: #666 !important;
+}
+
+.bg-danube {
+    background-color: #6a89cc !important;
+}
+
+.bg-prange-peel {
+    background-color: #FF9D00 !important;
+}
+
+.bg-turquoise {
+    background-color: #33CCCC !important;
+}
+.bg-light-gray {
+    background-color: #c6c9cd;
+}
+/*********************************************/
+
+.text-pelorous {
+    color: #4ac1c7 !important;
+}
+
+.text-chathamsblue {
+    color: #154576 !important;
+}
+
+.text-chateau-green {
+    color: #3CB963;
+}
+
+.text-chateau-green {
+    color: #3CB963;
+}
+
+.text-turquoise {
+    color: #33CCCC;
+}
+
+/*********************************************/
+.text-shadow-dark {
+    text-shadow: 0 0 2px #000 !important;
+}
+
+.text-shadow-pelorous {
+    text-shadow: 0 0 2px #4ac1c7 !important;
+}
+
+.text-shadow-danube {
+    text-shadow: 0 0 0px #6a89cc !important;
+}
+
+/*********************************************/
+.border-pelorous {
+    border: 1px solid #4ac1c7 !important;
+}
+
+.border-danube {
+    border-color: #6a89cc !important;
+}
+
+.border-pelorous {
+    border: 1px solid #4ac1c7 !important;
+}
+
+.border-secondary {
+    border: 1px solid #6c757d !important;
+}
+
+/*****************************************************/
+.font-size-14 {
+    font-size: 14px !important;
+}
+
+.font-size-10 {
+    font-size: 10px !important;
+}
+
+.font-size-12 {
+    font-size: 12px !important;
+}
+
+.font-size-07rem {
+    font-size: 0.6rem;
+}
+
+/*****************************************************/
+.shadow-sm {
+    box-shadow: 0 0 2px 1px #45454540 !important;
+}
+
+/*****************************************************/
+.font-size-xxl {
+    font-size: xx-large !important;
+}
+
+.font-size-xl {
+    font-size: x-large !important;
+}
+
+.font-size-lg {
+    font-size: large !important;
+}
+
+.font-size-sm {
+    font-size: small !important;
+}
+
+.font-size-xs {
+    font-size: xx-small;
+}
+
+/*****************************************************/
+
+body,
+html {
+    overflow-x: hidden;
+}
+
+.content-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*****************************************************/
+
+/********************** Nav **************************
+nav a.nav-link ,.onex ul.nav a.nav-link {
+    width: 130px;
+    height: 36px;
+    line-height: 18px;
+    text-align: center;
+    background-color: #4ac1c7;
+    margin-left: 10px;
+    color: #FFF !important;
+    border-radius: 2px;
+}
+ ul.nav a.nav-link {
+    width: 150px;
+    margin: 10px auto 0;
+}
+/**********************************************************/
+/************************ Nav *****************************/
+nav ul li a.nav-link {
+    min-width: 140px;
+    text-align: center;
+    height: 36px;
+    line-height: 18px;
+}
+
+.logo {
+    height: 35px;
+    display: block;
+}
+
+.content-center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+/************************ Nav*********************************/
+/*************************************************************/
+/*********************** Onex ********************************/
+input.w-100.text-center.bg-pelorous.border.rounded {
+    height: 40px;
+}
+
+
+
+input::placeholder {
+    color: #4ac1c7;
+}
+
+/************************** Onex ********************************/
+/****************************************************************/
+/****************************************************************/
+.index-table-height {
+    height: 405px;
+}
+
+
+
+.nav-tabs .nav-link {
+    border: 1px solid white;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    color: #FFF !important;
+    background-color: #4a69bc !important;
+}
+
+
+
+/*************************************/
+
+tbody {
+    display: block;
+    max-height: 250px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+thead,
+tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+thead {
+    width: 100%;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #6A89CC;
+    color: #FFF;
+    font-weight: bold;
+}
+
+/*************************************/
+/***********************************************************************/
+.nav-tabs .nav-item .nav-link .border_tab {
+    position: absolute;
+    border-bottom: 2px #6a89cc solid;
+    width: 20px;
+    right: 0;
+    left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    bottom: -3px;
+    webkit-transition: .2s ease-out;
+    -moz-transition: .2s ease-out;
+    -o-transition: .2s ease-out;
+    msie-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+    z-index: 5000;
+}
+
+.nav-tabs .nav-item .nav-link:hover .border_tab,
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active .border_tab {
+    border-color: #4a69bc;
+    width: 100%;
+}
+
+
+
+
+
+/***********************************************************************/
+.nav-link.active {
+    background-color: #4A69BD !important;
+}
+
+.cus-nav-link-height {
+    height: 86px !important;
+    line-height: 72px;
+}
+
+.cu-border-tab {
+    position: absolute;
+    border-bottom: 3px #6A89CC solid;
+    width: 20px;
+    right: 0;
+    left: 0;
+    bottom: -4px;
+    margin-right: auto;
+    margin-left: auto;
+    transition: all .2s ease-out;
+    z-index: 5000;
+}
+
+.nav-link:hover .cu-border-tab,
+.nav-link.active .cu-border-tab {
+    border-color: #4A69BD;
+    width: 100%;
+}
+
+/***********************************************************************/
+
+
+/***********************************************************************/
+.table-sort-img {
+    width: 20px;
+    margin-left: 15px;
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+    bottom: inherit;
+    top: 1px;
+    border: 1px solid;
+    padding: 23px 0;
+}
+
+/****************************************************************/
+/****************************************************************/
+/************************ Counter *******************************/
+.counter figure {
+    background-image: url("../img/icon/counter-img-back.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 160px;
+    height: 160px;
+}
+
+.refresh {
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer;
+    width: 20px;
+}
+#users-img,#clock-img,#chart-img{
+    height: 110px;
+}
+.img-rotate{
+    width: 20px;
+}
+/************************ Counter *******************************/
+/******************************************************************/
+/******************************************************************/
+.row.features {
+    height: 150px;
+}
+
+/**************************************************/
+#border-circle-1 {
+    width: 15px;
+    left: 12px;
+    top: 0;
+}
+
+#border-circle-2 {
+    width: 15px;
+    left: 12px;
+    top: 150px;
+}
+
+#border-circle-3 {
+    width: 15px;
+    left: 12px;
+    top: 300px;
+}
+
+#border-circle-4 {
+    width: 15px;
+    left: 12px;
+    top: 450px;
+}
+
+/**************************************************/
+/******************************************************************/
+/******************************************************************/
+/************************ Token ************************************/
+ul li {
+    list-style-type: none;
+}
+
+.ul-li-circle {
+    left: -20px;
+    top: 7px;
+    width: 13px;
+    height: 13px;
+    background-color: #f3f3f3;
+    border-radius: 50%;
+    padding: 1.3px;
+}
+
+/************************* Token *************************************/
+/*********************************************************************/
+/*********************** customize your interface ********************/
+.mode {
+    background-position: right;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    cursor: pointer;
+}
+
+.night {
+    background-image: url(../img/asset/nightMode04.png);
+}
+
+.day {
+    background-image: url(../img/asset/dayMode03.png);
+}
+
+/*********************** customize your interface ********************/
+/********************************************************************/
+/************************** Footer **********************************/
+.social {
+    width: 48px;
+    height: 48px;
+    padding: 9px;
+}
+
+.social img {
+    width: 27px;
+    height: 27px;
+}
+img.social-icon {
+    width: 48px;
+    height: 48px;
+    display: block;
+}
+.social-width{
+    300px;
+}
+.copyright {
+    background-color: #333;
+    font-size: 60%;
+}
+
+/*********************** Footer************************************/
+
+
+
+
+
+
+/***********************************************************************/
+/**************************** Sign.html ********************************/
+.sign-section-height {
+    min-height: 455px;
+}
+
+
+.nav-tabs .nav-link {
+    height: 70px;
+    line-height: 70px;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    height: 70px;
+    line-height: 70px;
+    padding: 0;
+    margin: 0;
+}
+
+.singin-pass-width {
+    width: calc(100% - 20px);
+    display: inline-block;
+}
+
+.mix-pass .form-control:focus {
+    box-shadow: none;
+}
+
+.form-control .mix-pass:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #4ac1c7;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(74, 193, 199, 0.25);
+}
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #4ac1c7;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(249, 249, 249, 0.25);
+}
+/**********************************************************************************/
+/**********************************************************************************/
+.dashboard-icons {
+    width: 20px;
+    height: auto;
+}
+
+.dashboard-height {
+    height: 3.5rem;
+}
+
+.dahboard-search-box {
+    border: 1px solid #bcbcbc;
+    display: inline-block;
+    background-color: #FFF;
+    width: 90%;
+}
+
+.dahboard-search-box input {
+    background-color: transparent !important;
+    border: none;
+    padding: 0 10px;
+    float: left;
+    width: 94%;
+}
+
+
+.dahboard-search-box input::placeholder {
+    color: #bbb;
+}
+
+.dahboard-search-box button {
+    background-color: transparent;
+    border: none;
+    float: left;
+    border-radius: 3px;
+}
+
+.dahboard-search-box button img {
+    width: 15px;
+    height: 15px;
+}
+
+.chart {}
+
+.modal-dialog,
+.modal-content {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+}
+
+.new-order {
+    height: 353px;
+}
+
+.instruments-section-height {
+    height: 523px;
+}
+
+/**********************************************************************************/
+/**********************************************************************************/
+.report-table {
+    left: 0;
+    right: 0;
+    top: -70px;
+}
+
+.report-table-section {
+    min-height: 450p;
+}
+
+.report-table-hide-border {
+    border-width: 0px !important;
+}
+
+/**********************************************************************************/
+/**********************************************************************************/
+
+.balance-row-white-height {
+    height: 41px;
+}
+
+.balance-row-gray-height {
+    background-color: #F0F0F0;
+    height: 41px;
+}
+
+
+/**************************************************************************/
+input[type=date],
+input[type=datetime-local],
+input[type=month],
+input[type=time] {
+    -webkit-appearance: listbox;
+    color: #00000080 !important;
+}
+
+.active-menu-black-50 {
+    color: #00000080 !important;
+    border-color: #00000080 !important;
+}
+.nav-icon {
+    min-width: 40px !important;
+}
+.dropdown-toggle::after {
+    display:none;
+}
+.chart {
+        height: 593px;
+}
+select.w-100 {
+    height: 38px;
+}
+label.w-100 {
+    height: 38px;
+    line-height: 38px;
+}

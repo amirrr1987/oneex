@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!------------------------------------------------------------------------>
+    <!-------------------------------- Meta Data ----------------------------->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Free Web tutorials">
+    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+    <meta name="author" content="Amir MAghami">
+    <link rel="icon" href="img/nav/favicon.png" type="image/png">
+    <!-------------------------------- Meta Data ----------------------------->
+    <!------------------------------------------------------------------------>
+    <title>ONEX</title>
+    <!------------------------------------------------------------------------>
+    <!---------------------------- Style Sheet Links ------------------------->
+    <link type="text/css" rel="stylesheet" href="../css/animate.css">
+    <link type="text/css" rel="stylesheet" href="../css/all.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/grid.css">
+    <link type="text/css" rel="stylesheet" href="../css/custom.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/xs.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/sm.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/md.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/lg.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/xl.min.css">
+    <!---------------------------- Style Sheet Links ------------------------->
+    <!------------------------------------------------------------------------>
+</head>
+
+<body>
+    <header class="animatedParent animateOnce mb-4">
+        <nav class="navbar navbar-expand-sm navbar-light shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">
+                    <img src="../img/icon/icon-logo.svg" title="onex" alt="onex" class="logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item mr-2">
+                            <a class="nav-link border-pelorous text-pelorous rounded active-menu-black-50" href="exchange.html">Exchange</a>
+                        </li>
+                        <li class="nav-item dropdown mr-2">
+                            <a class="nav-link dropdown-toggle border-pelorous text-pelorous rounded" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Transaction
+                            </a>
+                            <div class="dropdown-menu border-pelorous" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item text-pelorous" href="deposit.html">Deposit</a>
+                                <a class="dropdown-item text-pelorous" href="withdraw.html">Withdraw</a>
+                                <a class="dropdown-item text-pelorous" href="withdraw-history.html">Withdraw History</a>
+                            </div>
+                        </li>
+                        <li class="nav-item mr-2">
+                            <a class="nav-link border-pelorous text-pelorous rounded" href="balance.html">Balance</a>
+                        </li>
+                        <li class="nav-item mr-2">
+                            <a class="nav-link border-pelorous text-pelorous rounded" href="tarde-history.html">Trade History</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto content-center">
+                        <li class="nav-item dropdown mr-2">
+                            <a class="nav-link dropdown-toggle rounded bg-secondary content-center p-1 nav-icon" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="../img/icon/icon-profile.svg" width="20" alt="">
+                            </a>
+                            <div class="dropdown-menu border-pelorous" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item text-pelorous" href="profile.html">Profile</a>
+                                <a class="dropdown-item text-pelorous" href="security.html">Security</a>
+                                <a class="dropdown-item text-pelorous" href="lastteenlogin.html">Last 10 Login</a>
+                                <a class="dropdown-item text-pelorous" href="logout.html"><img src="img/icon/logout.svg" width="30" height="30" alt="">Logout</a>
+                            </div>
+                        </li>
+                        <li class="nav-item mr-2">
+                            <a class="nav-link bg-pelorous text-white rounded text-capitalize" href="blank.html"><span class="pr-5 pl-5">Get TIC Token</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col mb-3 mt-3">
+
+                    <div class="text-center font-weight-bold">
+                        <h4 class="text-chathamsblue text-uppercase">balance</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col col-sm col-md col-lg col-xl-8 bg-zircon p-4 shadow-sm">
+                    <div class="row text-center">
+                        <div class="col-12 mb-3 col-sm col-md col-lg col-xl">
+                            <div class="box bg-white p-2 shadow-sm">
+                                <strong class="text-chathamsblue text-uppercase d-block mb-2">total</strong>
+                                <span class="text-chateau-green d-block font-weight-bold font-size-12">0.00000000</span>
+                                <span class="text-uppercase text-secondary font-weight-bold font-size-12">0.00 uds</span>
+                            </div>
+
+                        </div>
+                        <div class="col-12 mb-3 col-sm col-md col-lg col-xl">
+                            <div class="box bg-white p-2 shadow-sm">
+                                <strong class="text-chathamsblue text-uppercase d-block mb-2">total</strong>
+                                <span class="text-chateau-green d-block font-weight-bold font-size-12">0.00000000</span>
+                                <span class="text-uppercase text-secondary font-weight-bold font-size-12">0.00 uds</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm col-md col-lg col-xl">
+                            <div class="box bg-white p-2 shadow-sm">
+                                <strong class="text-chathamsblue text-uppercase d-block mb-2">total</strong>
+                                <span class="text-chateau-green d-block font-weight-bold font-size-12">0.00000000</span>
+                                <span class="text-uppercase text-secondary font-weight-bold font-size-12">0.00 uds</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-3">
+                <div class="col col-sm col-md col-lg col-xl-8 p-0">
+                    <div class="box shadow-sm bg-white pt-2 pb-2 pr-2 pl-2 text-center">
+                        <div class="progress">
+                            <div class="progress-bar bg-info" class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="text-chathamsblue mt-3">2000 remaining of 2000 USDT daily withdrawal limit</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col col-sm col-md col-lg col-xl-10">
+
+                </div>
+            </div>
+        </div>
+        <section class="bg-zircon">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col col-sm col-md col-lg col-xl-10">
+
+                        <div class="shadow-sm">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="balance-row-gray-height shadow-sm"></div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-5">
+                                <div class="col-12">
+                                    <div class="media row">
+                                        <div class="col-12 col-md-4 content-center">
+                                            <img class="" src="../img/balance/barcode.svg" width="150px" title="barcode" alt="barcode">
+                                        </div>
+                                        <div class="col-12 col-md-8 content-center">
+                                            <div class="media-body mt-4 mb-4 ">
+                                                <h5 class="mt-0 text-center text-md-left">Min deposit: 0.002 BTC</h5>
+                                                <p class="text-center text-md-left">Wallet address:</p>
+                                                <p class="text-center text-md-left"><span class="bg-white text-secondary font-weight-light border p-2">3MdzHjmYuQWCyDZryt2zyonKkzuc65WF3W</span><button class="bg-zircon border-0"><img class="d-inline" src="../img/balance/%EF%83%85.svg" width="20" title="" alt=""></button></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="bg-white balance-row-white-height shadow-sm">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-sm col-md col-lg col-xl-10">
+                                    <div class="p-3 p-md-5">
+                                        <p class="text-black-50 mb-3">
+                                            Once you have submitted your withdrawal request, we will send a confirmation email.
+                                            To confirm your withdrawal, please, click on the link provided in the email.
+                                        </p>
+                                        <div class="d-sm-inline text-center text-sm-left mr-3">
+                                            <span class=" font-weight-bold text-capitalize">Flat fee:</span> <span class="text-turquoise font-weight-bold">-0.01 ETH</span>
+                                        </div>
+                                        <div class="d-sm-inline text-center text-sm-left">
+                                            <span class=" font-weight-bold text-capitalize">Min withdraw:</span> <span class="text-turquoise font-weight-bold">0.02 ETH</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="p-4">
+                                        <form class="text-black-50" action="">
+
+
+                                            <div class="row">
+                                                <div class="col-12 col-md-6 col-lg-3">
+                                                    <div class="form-group">
+
+                                                        <label for="">Amount</label>
+
+                                                        <input class="w-100" type="text">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-lg-3">
+                                                    <div class="form-group">
+
+                                                        <label for="">You will receive</label>
+
+                                                        <input class="w-100" type="text">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-group">
+
+                                                        <label for="">Address</label>
+
+                                                        <input class="w-100" type="text">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <div class="form-group">
+                                                        <label for=""></label>
+                                                        <input class="bg-pelorous text-white border-0 w-100 mt-lg-2" type="submit" value="WITHDRAW">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <footer>
+        <div class="bg-dovegray text-white pt-5 pb-3 ">
+            <div class="container">
+                <div class="row mb-3">
+                    <div class="col-12 col-sm text-center text-sm-right">
+                        <span class="d-block">About</span>
+                        <span class="d-block">Security</span>
+                        <span class="d-block">Fee Structure</span>
+                        <span class="d-block">API docs</span>
+                        <span class="d-block">Support</span>
+                    </div>
+                    <div class="col-12 col-sm-2 d-none d-sm-block">
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle mb-2" href=""><img class="d-block mr-auto ml-auto align-self-center" src="../img/asset/telegram.png" title="" alt=""></a>
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle mb-2" href=""><img class="d-block m-auto" src="../img/asset/whatsapp.png" title="" alt=""></a>
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle" href=""><img class="d-block m-auto" src="../img/asset/instagram.png" title="" alt=""></a>
+                    </div>
+                    <div class="col-12 col-sm text-center text-sm-left">
+                        <span class="d-block">Cookie policy</span>
+                        <span class="d-block">Terms of use</span>
+                        <span class="d-block">CDX</span>
+                        <span class="d-block">Blog</span>
+                        <span class="d-block">Privacy</span>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-sm-6 text-center">
+                        <address>#88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890</address>
+                        <span class="d-block text-center">+9821 88 77 66 55</span>
+                        <span class="d-block text-center">support@onex.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center pt-3 pb-3 d-sm-none">
+            <div class="col-6 ">
+                <ul class="list-inline content">
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/telegram.png" title="" alt=""></a></li>
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/whatsapp.png" title="" alt=""></a></li>
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/instagram.png" title="" alt=""></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="bg-mineshaft copyright text-white text-center font-weight-light pt-2 pb-2">
+            <span>&copy;Copyright 2018. ONEX. All Rights Resevd</span>
+        </div>
+    </footer>
+
+    <!------------------------------------------------------------------------>
+    <!------------------------------- Script Links --------------------------->
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/fontawesome.min.js"></script>
+    <script src="../js/animated.js"></script>
+    <script src="../js/require.js"></script>
+    <script src="../js/custom.min.js"></script>
+    <!------------------------------- Script Links --------------------------->
+    <!------------------------------------------------------------------------>
+</body>
+
+</html>

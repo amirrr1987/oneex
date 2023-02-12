@@ -1,6 +1,6 @@
 const Container = (props: any) => {
     return (
-        <div className="container mx-auto px-4">
+        <div className={props.full ? ' mx-auto px-4' : 'container mx-auto px-4'}>
             {props.children}
         </div>
     )

@@ -8,7 +8,7 @@ const Counter = () => {
     return (
         <section className="py-12">
             <Container>
-                <div className=":uno: flex flex-col gap-y-8 items-center">
+                <div className=":uno: flex flex-col gap-y-8 md:flex-row md:justify-between md:w-3/4 mx-auto items-center">
                     <div className="text-center">
                         <CounterIcon iconName={'ph:chart-line-up-fill'} refreshData={onclicker} />
                         <div className=":uno: text-primary-600 text-2xl font-medium mb-2">3429 USD</div>

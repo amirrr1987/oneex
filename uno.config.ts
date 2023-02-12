@@ -6,7 +6,7 @@ export default defineConfig({
     // ...
     transformers: [
         transformerDirectives(),
-        transformerCompileClass(),
+        transformerCompileClass({classPrefix: 'oneex__'}),
     ],
     theme: {
         colors: {

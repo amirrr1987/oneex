@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!------------------------------------------------------------------------>
+    <!-------------------------------- Meta Data ----------------------------->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Free Web tutorials">
+    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+    <meta name="author" content="Amir MAghami">
+    <link rel="icon" href="../img/nav/favicon.png" type="image/png">
+    <!-------------------------------- Meta Data ----------------------------->
+    <!------------------------------------------------------------------------>
+    <title>ONEEX</title>
+    <!------------------------------------------------------------------------>
+    <!---------------------------- Style Sheet Links ------------------------->
+    <link type="text/css" rel="stylesheet" href="../css/animate.css">
+    <link type="text/css" rel="stylesheet" href="../css/all.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/grid.css">
+    <link type="text/css" rel="stylesheet" href="../css/custom.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/xs.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/sm.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/md.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/lg.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/xl.min.css">
+    <!---------------------------- Style Sheet Links ------------------------->
+    <!------------------------------------------------------------------------>
+</head>
+
+<body>
+    <header class="animatedParent animateOnce mb-4">
+        <nav class="navbar navbar-expand-sm navbar-light shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../img/icon/icon-logo.svg" title="oneex" alt="oneex" class="logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item mr-2">
+                            <a class="nav-link border-pelorous text-pelorous rounded" href="exchange.html">Exchange</a>
+                        </li>
+                        <li class="nav-item dropdown mr-2">
+                            <a class="nav-link dropdown-toggle border-pelorous text-pelorous rounded" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Transaction
+                            </a>
+                            <div class="dropdown-menu border-pelorous" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item text-pelorous" href="deposit.html">Deposit</a>
+                                <a class="dropdown-item text-pelorous active-menu-black-50" href="withdraw.html">Withdraw</a>
+                                <a class="dropdown-item text-pelorous" href="withdraw-history.html">Withdraw History</a>
+                            </div>
+                        </li>
+                        <li class="nav-item mr-2">
+                            <a class="nav-link border-pelorous text-pelorous rounded" href="tarde-history.html">Trade History</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto content-center">
+                        <li class="nav-item dropdown mr-2">
+                            <a class="nav-link dropdown-toggle rounded bg-secondary content-center p-1 nav-icon" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="../img/icon/icon-profile.svg" width="20" alt="">
+                            </a>
+                            <div class="dropdown-menu border-pelorous" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item text-pelorous" href="profile.html">Profile</a>
+                                <a class="dropdown-item text-pelorous" href="security.html">Security</a>
+                                <a class="dropdown-item text-pelorous" href="lastteenlogin.html">Last 10 Login</a>
+                                <a class="dropdown-item text-pelorous" href="logout.html"><img src="img/icon/logout.svg" width="30" height="30" alt="">Logout</a>
+                            </div>
+                        </li>
+                        <li class="nav-item mr-2">
+                            <a class="nav-link bg-pelorous text-white rounded text-capitalize" href="blank.html"><span class="pr-5 pl-5">Get TIC Token</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="mt-5">
+                        <h4 class="text-chathamsblue text-center font-weight-bold text-uppercase">withdraw</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-12 col-lg-10 col-xl-11">
+                    <div class="">
+                        <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link bg-danube text-white rounded-0 position-relative active" id="btc-tab" data-toggle="tab" href="#btc" role="tab" aria-controls="btc" aria-selected="true"><span class="text-uppercase">btc</span>
+                                    <div class="border_tab"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link bg-danube text-white border border-white rounded-0 position-relative " id="tic-tab" data-toggle="tab" href="#tic" role="tab" aria-controls="tic" aria-selected="false"><span class="text-uppercase">tic</span>
+                                    <div class="border_tab"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link bg-danube text-white border border-white rounded-0 position-relative " id="gvc-tab" data-toggle="tab" href="#gvc" role="tab" aria-controls="gvc" aria-selected="false"><span class="text-uppercase">gvc</span>
+                                    <div class="border_tab"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="bg-zircon">
+            <div class="container">
+                <div class="row d-none d-md-flex justify-content-center">
+                    <div class="col-12 col-lg-10 col-xl-11">
+                        <div class="mb-5">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane active show" id="btc" role="tabpanel" aria-labelledby="btc-tab">
+                                    <section class="witdraw mt-1">
+                                        <nav class="bg-light-gray w-100 shadow-sm pt-2 pb-2 pr-3 pl-3"><strong class="">Withdraw
+                                            </strong></nav>
+                                        <div class="bg-white shadow-sm  pr-3 pl-3">
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <form class="form pt-3 pb-3">
+                                                        <div class="row">
+                                                            <div class="col-1">
+                                                                <label class="w-100">Coin :</label>
+                                                            </div>
+                                                            <div class="col-3">
+
+                                                                <div class="form-group">
+                                                                    <input type="password" class="form-control w-100" id="" placeholder="Your Balance : 100 BTC">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+
+                                                                <div class="form-group">
+                                                                    <input type="text" name="toaddress" class="form-control w-100" placeholder="Bitcoin Address">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <div class="form-group">
+                                                                    <select class="w-100">
+                                                                        <option class="text-capitalize">low</option>
+                                                                        <option class="text-capitalize">medium</option>
+                                                                        <option class="text-capitalize">hight</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+
+                                                                <div class="form-group">
+
+                                                                    <button type="submit" class="btn text-white bg-pelorous w-100 border-0">Submit</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section class="withdraw-fee-calculator mt-1">
+                                        <nav class="bg-light-gray w-100 shadow-sm pt-2 pb-2 pr-3 pl-3"><strong class="text-">Withdraw Fee Calculator
+                                            </strong></nav>
+                                        <div class="bg-white shadow-sm  pr-3 pl-3">
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <form class="form pt-3 pb-3">
+                                                        <div class="row">
+                                                            <div class="col-1">
+                                                                <label class="w-100">Coin :</label>
+                                                            </div>
+                                                            <div class="col-3">
+
+                                                                <div class="form-group">
+                                                                    <input type="password" class="form-control w-100" id="" placeholder="Your Balance : 100 BTC">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+
+                                                                <div class="form-group">
+                                                                    <input type="text" name="toaddress" class="form-control w-100" placeholder="Bitcoin Address">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <div class="form-group">
+                                                                    <select class="w-100">
+                                                                        <option class="text-capitalize">low</option>
+                                                                        <option class="text-capitalize">medium</option>
+                                                                        <option class="text-capitalize">hight</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+
+                                                                <div class="form-group">
+
+                                                                    <button type="submit" class="btn text-white bg-pelorous w-100 border-0">Calculate</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="tab-pane fade" id="gvc" role="tabpanel" aria-labelledby="gvc-tab">...</div>
+                                <div class="tab-pane fade" id="tic" role="tabpanel" aria-labelledby="tic-tab">...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="bg-dovegray text-white pt-5 pb-3 ">
+            <div class="container">
+                <div class="row mb-3">
+                    <div class="col-12 col-sm text-center text-sm-right">
+                        <span class="d-block">About</span>
+                        <span class="d-block">Security</span>
+                        <span class="d-block">Fee Structure</span>
+                        <span class="d-block">API docs</span>
+                        <span class="d-block">Support</span>
+                    </div>
+                    <div class="col-12 col-sm-2 d-none d-sm-block">
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle mb-2" href=""><img class="d-block mr-auto ml-auto align-self-center" src="../img/asset/telegram.png" title="" alt=""></a>
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle mb-2" href=""><img class="d-block m-auto" src="../img/asset/whatsapp.png" title="" alt=""></a>
+                        <a class="social d-block mr-auto ml-auto bg-white border border-cyan rounded-circle" href=""><img class="d-block m-auto" src="../img/asset/instagram.png" title="" alt=""></a>
+                    </div>
+                    <div class="col-12 col-sm text-center text-sm-left">
+                        <span class="d-block">Cookie policy</span>
+                        <span class="d-block">Terms of use</span>
+                        <span class="d-block">CDX</span>
+                        <span class="d-block">Blog</span>
+                        <span class="d-block">Privacy</span>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-sm-6 text-center">
+                        <address>#88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890</address>
+                        <span class="d-block text-center">+9821 88 77 66 55</span>
+                        <span class="d-block text-center">support@oneex.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center pt-3 pb-3 d-sm-none">
+            <div class="col-6 ">
+                <ul class="list-inline content">
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/telegram.png" title="" alt=""></a></li>
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/whatsapp.png" title="" alt=""></a></li>
+                    <li class="list-inline-item"><a class="" href=""><img class="" src="../img/asset/instagram.png" title="" alt=""></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="bg-mineshaft copyright text-white text-center font-weight-light pt-2 pb-2">
+            <span>&copy;Copyright 2018. oneex. All Rights Resevd</span>
+        </div>
+    </footer>
+
+    <!------------------------------------------------------------------------>
+    <!------------------------------- Script Links --------------------------->
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/fontawesome.min.js"></script>
+    <script src="../js/animated.js"></script>
+    <script src="../js/custom.min.js"></script>
+    <!------------------------------- Script Links --------------------------->
+    <!------------------------------------------------------------------------>
+</body>
+
+</html>
