@@ -26,7 +26,7 @@ const TheDashboard = () => {
                     </div>
                 </Container>
             </nav>
-            <section className='py-12'>
+            <section className=':uno: py-12'>
                 <Container full>
                     <div className=":uno: ">
                         <div className='text-[#154576] text-uppercase font-medium text-3xl text-center'>
@@ -36,7 +36,7 @@ const TheDashboard = () => {
                         <div className=":uno: text-center">
                             oneex is licened trading platform to cryptocurrencies & assets, built on vanguard security infrastructure and revolutionary reward system
                         </div>
-                        <div className=":uno: f">
+                        <div className=":uno:">
                             <Form className=":uno: flex flex-col gap-y-0">
                                 <Form.Item className=":uno: flex-1 mb-4">
                                     <Input type="text" />

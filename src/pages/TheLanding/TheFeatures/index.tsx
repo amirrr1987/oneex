@@ -9,10 +9,10 @@ import img05 from './assets/images/loyality-program.svg'
 import img06 from './assets/images/media-object.svg'
 const Features = () => {
     return (
-        <section className="py-12 bg-primary-50">
+        <section className=":uno: py-12 bg-primary-50">
             <Container>
-                <div className="text-center font-bold text-xl text-primary-900 mb-4 md:mb-12">OUR FEATURES AND BENEFITS</div>
-                <div className="grid gap-8 md:grid-cols-3">
+                <div className=":uno: text-center font-bold text-xl text-primary-900 mb-4 md:mb-12">OUR FEATURES AND BENEFITS</div>
+                <div className=":uno: grid gap-8 md:grid-cols-3">
                     <CardItem img={img01} title="official licenses" caption="oneex acquired all the necessary official licenses for providing exchange servicesto make your trades safe and confident." />
                     <CardItem img={img02} title="ECC API" caption="
                                     unlike other exchanges, we dont store API secrets. By utilizing EdDSA we store only

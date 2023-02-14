@@ -2,7 +2,7 @@ import { Button } from "antd"
 import Container from "@/components/Container"
 const GetToken = (props: any) => {
     return (
-        <section className=":uno: bg-primary-500 py-12">
+        <section className=":uno:  bg-primary-500 py-12">
             <Container>
                 <div className=":uno: grid md:grid-cols-2 gap-4 md:gap-12 text-white">
                     <div className=":uno: text-center text-3xl font-bold md:col-span-2">

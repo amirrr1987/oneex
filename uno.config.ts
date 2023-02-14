@@ -6,7 +6,7 @@ export default defineConfig({
     // ...
     transformers: [
         transformerDirectives(),
-        transformerCompileClass({classPrefix: 'oneex__'}),
+        transformerCompileClass({classPrefix: 'oneex__',keepUnknown: false}),
     ],
     theme: {
         colors: {
@@ -31,5 +31,8 @@ export default defineConfig({
                 DEFAULT: '#fd9c26'
             }
         }
+    },
+    shortcuts: {
+        title: 'font-medium text-6xl text-red',
     }
 })
