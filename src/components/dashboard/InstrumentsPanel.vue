@@ -1,20 +1,27 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import Button from 'ant-design-vue/es/button'
+import Card from 'ant-design-vue/es/card'
+import Input from 'ant-design-vue/es/input'
+import Radio from 'ant-design-vue/es/radio'
+import Spin from 'ant-design-vue/es/spin'
+import Typography from 'ant-design-vue/es/typography'
+import { CloseOutlined, DollarOutlined, SearchOutlined, StarOutlined } from '@ant-design/icons-vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
+import { useMarketStore } from '@/stores/market'
 
-type InstrumentRow = {
-  market: string
-  lastPrice: string
-  change24: string
-  volume24: string
-}
+const { Title, Text } = Typography
+
+const market = useMarketStore()
+const { rows, isLoading } = storeToRefs(market)
 
 const tabs = [
-  { id: 'btc', label: 'BTC', icon: 'bi-currency-bitcoin' },
-  { id: 'tic', label: 'TIC', icon: 'bi-coin' },
-  { id: 'gvc', label: 'GVC', icon: 'bi-gem' },
+  { id: 'btc', label: 'BTC', icon: DollarOutlined },
+  { id: 'tic', label: 'TIC', icon: DollarOutlined },
+  { id: 'gvc', label: 'GVC', icon: StarOutlined },
 ] as const
 
 const activeTab = ref<(typeof tabs)[number]['id']>('btc')
@@ -29,6 +36,14 @@ watch(searchQuery, (value) => {
   void applySearch(value)
 })
 
+watch(activeTab, (tab) => {
+  void market.fetchMarkets(tab.toUpperCase())
+})
+
+onMounted(() => {
+  void market.fetchMarkets('BTC')
+})
+
 const columns = [
   { key: 'market' as const, label: 'Market' },
   { key: 'lastPrice' as const, label: 'Last Price' },
@@ -36,69 +51,61 @@ const columns = [
   { key: 'volume24' as const, label: '24 Volume' },
 ]
 
-const allRows: InstrumentRow[] = [
-  { market: 'AE/BTC', lastPrice: '0.0001099', change24: '+2.4%', volume24: '120 BTC' },
-  { market: 'REP/BTC', lastPrice: '0.0001099', change24: '-1.1%', volume24: '80 BTC' },
-  { market: 'XTZ/BTC', lastPrice: '0.0000451', change24: '+0.8%', volume24: '200 BTC' },
-  { market: 'TIC/BTC', lastPrice: '0.0000125', change24: '+5.2%', volume24: '340 BTC' },
-  { market: 'GVC/BTC', lastPrice: '0.0000088', change24: '-0.5%', volume24: '45 BTC' },
-]
-
 const filteredRows = computed(() => {
-  if (!debouncedQuery.value) return allRows
-  return allRows.filter((row) =>
+  const source = rows.value.map((row) => ({
+    market: row.market,
+    lastPrice: row.lastPrice,
+    change24: row.change24,
+    volume24: row.volume24,
+  }))
+
+  if (!debouncedQuery.value) return source
+  return source.filter((row) =>
     Object.values(row).some((value) => value.toLowerCase().includes(debouncedQuery.value)),
   )
 })
 </script>
 
 <template>
-  <div class="card shadow-sm flex-grow-1">
-    <div class="card-header bg-white d-flex align-items-center gap-2">
-      <i class="bi bi-search text-primary" />
-      <h6 class="mb-0">Instruments</h6>
-    </div>
-    <div class="card-body">
-      <div class="input-group mb-3">
-        <span class="input-group-text"><i class="bi bi-search" /></span>
-        <input
-          v-model="searchQuery"
-          class="form-control"
-          type="search"
-          placeholder="Search markets..."
-        />
-        <button
-          v-if="searchQuery"
-          class="btn btn-outline-secondary"
-          type="button"
-          aria-label="Clear search"
-          @click="searchQuery = ''"
+  <Spin :spinning="isLoading">
+    <Card class="flex-grow">
+      <template #title>
+        <span class="inline-flex items-center gap-2">
+          <SearchOutlined />
+          <Title :level="5" class="mb-0">Instruments</Title>
+        </span>
+      </template>
+
+      <Input v-model:value="searchQuery" type="search" placeholder="Search markets..." class="mb-3">
+        <template #prefix>
+          <SearchOutlined />
+        </template>
+        <template v-if="searchQuery" #suffix>
+          <Button type="text" size="small" aria-label="Clear search" @click="searchQuery = ''">
+            <template #icon><CloseOutlined /></template>
+          </Button>
+        </template>
+      </Input>
+
+      <Radio.Group v-model:value="activeTab" button-style="solid" class="mb-3 flex w-full">
+        <Radio.Button
+          v-for="tab in tabs"
+          :key="tab.id"
+          :value="tab.id"
+          class="flex-1 text-center"
         >
-          <i class="bi bi-x-lg" />
-        </button>
-      </div>
-
-      <ul class="nav nav-tabs nav-fill mb-3" role="tablist">
-        <li v-for="tab in tabs" :key="tab.id" class="nav-item">
-          <button
-            type="button"
-            class="nav-link d-inline-flex align-items-center justify-content-center gap-1"
-            :class="{ active: activeTab === tab.id }"
-            @click="activeTab = tab.id"
-          >
-            <i :class="['bi', tab.icon]" />
+          <span class="inline-flex items-center justify-center gap-1">
+            <component :is="tab.icon" />
             {{ tab.label }}
-          </button>
-        </li>
-      </ul>
+          </span>
+        </Radio.Button>
+      </Radio.Group>
 
-      <div v-if="filteredRows.length" class="table-responsive">
-        <SortableTable :columns="columns" :rows="filteredRows" row-key="market" />
+      <SortableTable v-if="filteredRows.length" :columns="columns" :rows="filteredRows" row-key="market" />
+      <div v-else class="py-4 text-center">
+        <SearchOutlined class="mb-2 block text-5xl" />
+        <Text class="text-sm">No markets match your search.</Text>
       </div>
-      <p v-else class="text-center text-muted small mb-0 py-4">
-        <i class="bi bi-search display-6 d-block mb-2" />
-        No markets match your search.
-      </p>
-    </div>
-  </div>
+    </Card>
+  </Spin>
 </template>

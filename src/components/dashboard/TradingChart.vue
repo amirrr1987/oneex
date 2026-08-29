@@ -1,9 +1,29 @@
 <script setup lang="ts">
+import Button from 'ant-design-vue/es/button'
+import Card from 'ant-design-vue/es/card'
+import Modal from 'ant-design-vue/es/modal'
+import Space from 'ant-design-vue/es/space'
+import Typography from 'ant-design-vue/es/typography'
+import {
+  ApartmentOutlined,
+  BarChartOutlined,
+  ClockCircleOutlined,
+  ExportOutlined,
+  FullscreenOutlined,
+  LeftOutlined,
+  LineChartOutlined,
+  MinusOutlined,
+  BulbOutlined,
+  RightOutlined,
+  RiseOutlined,
+  SettingOutlined,
+  StarOutlined,
+} from '@ant-design/icons-vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useScriptTag } from '@vueuse/core'
 
-import { useThemeStore } from '@/stores/theme'
+import { useConfigProviderStore } from '@/stores/config-provider.store'
 
 declare global {
   interface Window {
@@ -14,19 +34,22 @@ declare global {
 }
 
 const chartStyles = [
-  { id: 'candles', icon: 'bi-bar-chart-line', label: 'Candles', style: '1' },
-  { id: 'line', icon: 'bi-graph-up', label: 'Line', style: '2' },
-  { id: 'area', icon: 'bi-graph-up-arrow', label: 'Area', style: '3' },
-  { id: 'bars', icon: 'bi-bar-chart', label: 'Bars', style: '0' },
-  { id: 'baseline', icon: 'bi-border-middle', label: 'Baseline', style: '10' },
-  { id: 'heikin', icon: 'bi-diagram-3', label: 'Heikin Ashi', style: '8' },
+  { id: 'candles', icon: BarChartOutlined, label: 'Candles', style: '1' },
+  { id: 'line', icon: LineChartOutlined, label: 'Line', style: '2' },
+  { id: 'area', icon: RiseOutlined, label: 'Area', style: '3' },
+  { id: 'bars', icon: BarChartOutlined, label: 'Bars', style: '0' },
+  { id: 'baseline', icon: MinusOutlined, label: 'Baseline', style: '10' },
+  { id: 'heikin', icon: ApartmentOutlined, label: 'Heikin Ashi', style: '8' },
 ] as const
 
-const themeStore = useThemeStore()
-const { isDark } = storeToRefs(themeStore)
+const { Text } = Typography
+
+const configProvider = useConfigProviderStore()
+const { isDark } = storeToRefs(configProvider)
 
 const activeStyle = ref<(typeof chartStyles)[number]['id']>('candles')
 const chartContainerId = 'tradingview_906a9'
+const modalOpen = ref(false)
 
 const chartTheme = computed(() => (isDark.value ? 'Dark' : 'Light'))
 
@@ -72,92 +95,76 @@ watch(isDark, () => {
 </script>
 
 <template>
-  <div
+  <Card
     v-motion
-    class="card shadow-sm h-100"
+    class="h-full"
     :initial="{ opacity: 0, y: 12 }"
     :enter="{ opacity: 1, y: 0, transition: { duration: 400 } }"
   >
-    <div class="card-header bg-white">
-      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-        <div class="d-flex flex-wrap align-items-center gap-1">
-          <button type="button" class="btn btn-outline-secondary btn-sm" title="Fullscreen">
-            <i class="bi bi-arrows-fullscreen" />
-          </button>
-          <button
+    <template #title>
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <Space wrap>
+          <Button size="small" title="Fullscreen">
+            <template #icon><FullscreenOutlined /></template>
+          </Button>
+          <Button
             v-for="style in chartStyles"
             :key="style.id"
-            type="button"
-            class="btn btn-sm"
-            :class="activeStyle === style.id ? 'btn-primary' : 'btn-outline-secondary'"
+            size="small"
+            :type="activeStyle === style.id ? 'primary' : 'default'"
             :title="style.label"
             @click="selectStyle(style.id)"
           >
-            <i :class="['bi', style.icon]" />
-          </button>
-          <span class="fw-semibold text-uppercase ms-2">ETH / BTC, 5</span>
-        </div>
-        <div class="d-flex align-items-center gap-1">
-          <button type="button" class="btn btn-outline-secondary btn-sm" title="Previous">
-            <i class="bi bi-chevron-left" />
-          </button>
-          <button type="button" class="btn btn-outline-secondary btn-sm" title="Next">
-            <i class="bi bi-chevron-right" />
-          </button>
-          <button type="button" class="btn btn-outline-secondary btn-sm" title="Favorite">
-            <i class="bi bi-star" />
-          </button>
-          <button type="button" class="btn btn-outline-secondary btn-sm" title="Settings">
-            <i class="bi bi-gear" />
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#chartModal"
-            title="Expand chart"
-          >
-            <i class="bi bi-box-arrow-up-right" />
-          </button>
-        </div>
+            <template #icon>
+              <component :is="style.icon" />
+            </template>
+          </Button>
+          <Text strong class="ml-2 uppercase">ETH / BTC, 5</Text>
+        </Space>
+        <Space>
+          <Button size="small" title="Previous">
+            <template #icon><LeftOutlined /></template>
+          </Button>
+          <Button size="small" title="Next">
+            <template #icon><RightOutlined /></template>
+          </Button>
+          <Button size="small" title="Favorite">
+            <template #icon><StarOutlined /></template>
+          </Button>
+          <Button size="small" title="Settings">
+            <template #icon><SettingOutlined /></template>
+          </Button>
+          <Button size="small" title="Expand chart" @click="modalOpen = true">
+            <template #icon><ExportOutlined /></template>
+          </Button>
+        </Space>
       </div>
-    </div>
+    </template>
 
-    <div class="card-body">
-      <div class="d-flex flex-wrap gap-3 small text-muted mb-3">
-        <span v-for="item in ['O', 'H', 'L', 'C']" :key="item">
-          {{ item }}: <span class="text-danger fw-semibold">0.26865</span>
-        </span>
-        <span>
-          <i class="bi bi-clock me-1" />
-          Volume: <span class="text-danger fw-semibold">0.9642</span>
-        </span>
-      </div>
-      <div :id="chartContainerId" class="ratio ratio-16x9 bg-light rounded" />
-    </div>
-  </div>
+    <Space wrap class="mb-3 text-sm">
+      <span v-for="item in ['O', 'H', 'L', 'C']" :key="item">
+        {{ item }}: <Text strong>0.26865</Text>
+      </span>
+      <span>
+        <ClockCircleOutlined class="mr-1" />
+        Volume: <Text strong>0.9642</Text>
+      </span>
+    </Space>
 
-  <div id="chartModal" class="modal fade" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 id="chartModalLabel" class="modal-title d-flex align-items-center gap-2">
-            <i class="bi bi-bar-chart-line text-primary" />
-            ETH / BTC Chart
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-        </div>
-        <div class="modal-body">
-          <p class="mb-2">
-            <i class="bi bi-moon-stars me-2" />
-            Chart theme follows your {{ isDark ? 'night' : 'day' }} mode setting.
-          </p>
-          <p class="mb-0 text-muted small">Active style: {{ activeStyle }}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    <div :id="chartContainerId" class="aspect-video w-full rounded" />
+  </Card>
+
+  <Modal v-model:open="modalOpen" title="ETH / BTC Chart" :width="800">
+    <template #title>
+      <span class="inline-flex items-center gap-2">
+        <BarChartOutlined />
+        ETH / BTC Chart
+      </span>
+    </template>
+    <p class="mb-2">
+      <BulbOutlined class="mr-2" />
+      Chart theme follows your {{ isDark ? 'night' : 'day' }} mode setting.
+    </p>
+    <Text class="text-sm">Active style: {{ activeStyle }}</Text>
+  </Modal>
 </template>

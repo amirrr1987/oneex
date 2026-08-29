@@ -1,5 +1,8 @@
 import { z } from 'zod'
 
+import { ASSET_CONFIG, type SupportedCoin, type WithdrawPriority } from '@/constants/exchange'
+import { isValidAddress } from '@/utils/addresses'
+
 export const profileSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
@@ -22,8 +25,36 @@ export const withdrawSchema = z.object({
     .string()
     .min(1, 'Amount is required')
     .refine((value) => !Number.isNaN(Number(value)) && Number(value) > 0, 'Enter a valid amount'),
-  priority: z.enum(['Low', 'Medium', 'High']),
+  priority: z.enum(['Low', 'Medium', 'High'] satisfies [WithdrawPriority, WithdrawPriority, WithdrawPriority]),
 })
+
+export function createWithdrawSchema(coin: SupportedCoin, available: number, fee: number) {
+  const config = ASSET_CONFIG[coin]
+  return withdrawSchema.superRefine((data, ctx) => {
+    const amount = Number(data.amount)
+    if (amount < config.minWithdraw) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Minimum withdrawal is ${config.minWithdraw} ${coin}`,
+        path: ['amount'],
+      })
+    }
+    if (amount + fee > available) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Insufficient balance including network fee',
+        path: ['amount'],
+      })
+    }
+    if (!isValidAddress(coin, data.address)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Enter a valid ${coin} address`,
+        path: ['address'],
+      })
+    }
+  })
+}
 
 export const balanceWithdrawSchema = z.object({
   amount: z

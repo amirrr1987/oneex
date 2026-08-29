@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import Alert from 'ant-design-vue/es/alert'
+import Button from 'ant-design-vue/es/button'
+import Form from 'ant-design-vue/es/form'
+import FormItem from 'ant-design-vue/es/form/FormItem'
+import { SafetyCertificateOutlined } from '@ant-design/icons-vue'
 import { ref } from 'vue'
 
 import PasswordField from '@/components/shared/PasswordField.vue'
@@ -25,45 +30,52 @@ async function onSubmit() {
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
-    <div class="mb-3">
-      <label class="form-label">Current password</label>
+  <Form layout="vertical" @submit.prevent="onSubmit">
+    <FormItem
+      label="Current password"
+      :validate-status="fieldError('currentPassword') ? 'error' : undefined"
+      :help="fieldError('currentPassword')"
+    >
       <PasswordField
         v-model="values.currentPassword"
         placeholder="Current password"
         :invalid="Boolean(fieldError('currentPassword'))"
       />
-      <div v-if="fieldError('currentPassword')" class="invalid-feedback d-block">
-        {{ fieldError('currentPassword') }}
-      </div>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">New password</label>
+    </FormItem>
+
+    <FormItem
+      label="New password"
+      :validate-status="fieldError('newPassword') ? 'error' : undefined"
+      :help="fieldError('newPassword')"
+    >
       <PasswordField
         v-model="values.newPassword"
         placeholder="New password"
         :invalid="Boolean(fieldError('newPassword'))"
       />
-      <div v-if="fieldError('newPassword')" class="invalid-feedback d-block">{{ fieldError('newPassword') }}</div>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Repeat new password</label>
+    </FormItem>
+
+    <FormItem
+      label="Repeat new password"
+      :validate-status="fieldError('confirmPassword') ? 'error' : undefined"
+      :help="fieldError('confirmPassword')"
+    >
       <PasswordField
         v-model="values.confirmPassword"
         placeholder="Repeat new password"
         :invalid="Boolean(fieldError('confirmPassword'))"
       />
-      <div v-if="fieldError('confirmPassword')" class="invalid-feedback d-block">
-        {{ fieldError('confirmPassword') }}
-      </div>
-    </div>
-    <div class="d-grid col-9 mx-auto">
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-        <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" />
-        <i v-else class="bi bi-shield-check me-2" />
+    </FormItem>
+
+    <div class="mx-auto w-3/4">
+      <Button type="primary" html-type="submit" block :loading="isSubmitting">
+        <template v-if="!isSubmitting" #icon>
+          <SafetyCertificateOutlined />
+        </template>
         Save Changes
-      </button>
+      </Button>
     </div>
-    <div v-if="successMessage" class="alert alert-success mt-3 mb-0 py-2 small">{{ successMessage }}</div>
-  </form>
+
+    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon class="mt-3" />
+  </Form>
 </template>

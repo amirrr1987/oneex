@@ -1,6 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Alert from 'ant-design-vue/es/alert'
+import Button from 'ant-design-vue/es/button'
+import Form from 'ant-design-vue/es/form'
+import FormItem from 'ant-design-vue/es/form/FormItem'
+import Input from 'ant-design-vue/es/input'
+import Select from 'ant-design-vue/es/select'
+import Typography from 'ant-design-vue/es/typography'
+import {
+  CalculatorOutlined,
+  DollarOutlined,
+  EnvironmentOutlined,
+  SendOutlined,
+  WalletOutlined,
+} from '@ant-design/icons-vue'
+import { computed, ref } from 'vue'
 
+import { ASSET_CONFIG, type SupportedCoin, type WithdrawPriority } from '@/constants/exchange'
 import { useZodForm } from '@/composables/useZodForm'
 import { withdrawSchema } from '@/schemas/forms'
 import { useWalletStore } from '@/stores/wallet'
@@ -9,11 +24,15 @@ const props = defineProps<{
   coin: string
 }>()
 
+const { Title, Text } = Typography
 const wallet = useWalletStore()
 const successMessage = ref('')
+const errorMessage = ref('')
 const feeResult = ref('')
+const priority = ref<WithdrawPriority>('Medium')
 
-const priorities = ['Low', 'Medium', 'High'] as const
+const coin = computed(() => props.coin as SupportedCoin)
+const estimatedFee = computed(() => wallet.estimateWithdrawFee(coin.value, priority.value))
 
 const { values, fieldError, submit, isSubmitting, validate } = useZodForm(withdrawSchema, {
   address: '',
@@ -23,82 +42,108 @@ const { values, fieldError, submit, isSubmitting, validate } = useZodForm(withdr
 
 async function onSubmit() {
   successMessage.value = ''
-  await submit(async () => {
-    successMessage.value = `Withdrawal of ${values.amount} ${props.coin} submitted (demo).`
-  })
+  errorMessage.value = ''
+  values.priority = priority.value
+
+  if (!validate()) return
+
+  try {
+    await submit(async () => {
+      wallet.submitWithdraw({
+        coin: coin.value,
+        amount: Number(values.amount),
+        address: values.address.trim(),
+        priority: priority.value,
+      })
+      successMessage.value = `Withdrawal of ${values.amount} ${coin.value} queued for blockchain broadcast.`
+      values.address = ''
+      values.amount = ''
+    })
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'Withdrawal failed'
+  }
 }
 
-async function onCalculate() {
+function onCalculate() {
   feeResult.value = ''
   if (!validate()) return
-  const fee = (Number(values.amount) * 0.001).toFixed(6)
-  feeResult.value = `Estimated fee: ${fee} ${props.coin}`
+  feeResult.value = `Network fee (${priority.value}): ${estimatedFee.value} ${coin.value}`
 }
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
-    <div class="row g-3 align-items-end">
-      <div class="col-md-3">
-        <label class="form-label">Balance</label>
-        <div class="input-group">
-          <span class="input-group-text"><i class="bi bi-wallet2" /></span>
-          <input type="text" class="form-control" :value="`${wallet.getBalance(coin)} ${coin}`" readonly />
-        </div>
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Amount</label>
-        <div class="input-group">
-          <span class="input-group-text"><i class="bi bi-cash" /></span>
-          <input
-            v-model="values.amount"
-            type="text"
-            class="form-control"
-            :class="{ 'is-invalid': fieldError('amount') }"
-            placeholder="0.00"
-          />
-        </div>
-        <div v-if="fieldError('amount')" class="invalid-feedback d-block">{{ fieldError('amount') }}</div>
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">Address</label>
-        <div class="input-group">
-          <span class="input-group-text"><i class="bi bi-geo-alt" /></span>
-          <input
-            v-model="values.address"
-            type="text"
-            class="form-control"
-            :class="{ 'is-invalid': fieldError('address') }"
-            placeholder="Destination address"
-          />
-        </div>
-        <div v-if="fieldError('address')" class="invalid-feedback d-block">{{ fieldError('address') }}</div>
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Priority</label>
-        <select v-model="values.priority" class="form-select">
-          <option v-for="p in priorities" :key="p" :value="p">{{ p }}</option>
-        </select>
-      </div>
-      <div class="col-12 col-md-3 ms-md-auto">
-        <button type="submit" class="btn btn-primary w-100" :disabled="isSubmitting">
-          <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" />
-          <i v-else class="bi bi-send me-2" />
+  <Form layout="vertical" @submit.prevent="onSubmit">
+    <div class="grid grid-cols-1 items-end gap-3 md:grid-cols-12">
+      <FormItem label="Balance" class="md:col-span-3">
+        <Input :value="`${wallet.getBalance(coin)} ${coin}`" readonly>
+          <template #prefix>
+            <WalletOutlined />
+          </template>
+        </Input>
+      </FormItem>
+
+      <FormItem
+        label="Amount"
+        class="md:col-span-3"
+        :validate-status="fieldError('amount') ? 'error' : undefined"
+        :help="fieldError('amount') || `Min ${ASSET_CONFIG[coin].minWithdraw} ${coin}`"
+      >
+        <Input v-model:value="values.amount" placeholder="0.00">
+          <template #prefix>
+            <DollarOutlined />
+          </template>
+        </Input>
+      </FormItem>
+
+      <FormItem
+        label="Address"
+        class="md:col-span-4"
+        :validate-status="fieldError('address') ? 'error' : undefined"
+        :help="fieldError('address')"
+      >
+        <Input v-model:value="values.address" placeholder="Destination address">
+          <template #prefix>
+            <EnvironmentOutlined />
+          </template>
+        </Input>
+      </FormItem>
+
+      <FormItem label="Priority" class="md:col-span-2">
+        <Select v-model:value="priority">
+          <Select.Option value="Low">Low</Select.Option>
+          <Select.Option value="Medium">Medium</Select.Option>
+          <Select.Option value="High">High</Select.Option>
+        </Select>
+      </FormItem>
+
+      <div class="md:col-span-3 md:col-start-10">
+        <Button type="primary" html-type="submit" block :loading="isSubmitting">
+          <template v-if="!isSubmitting" #icon>
+            <SendOutlined />
+          </template>
           Submit
-        </button>
+        </Button>
       </div>
     </div>
-    <div v-if="successMessage" class="alert alert-success mt-3 mb-0 py-2 small">{{ successMessage }}</div>
-  </form>
+
+    <Text class="mt-2 block text-sm">
+      Estimated network fee: {{ estimatedFee }} {{ coin }} · Daily limit remaining:
+      {{ wallet.remainingDailyWithdrawLimit() }} USDT
+    </Text>
+
+    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon class="mt-3" />
+    <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-3" />
+  </Form>
 
   <hr class="my-4" />
 
-  <div class="d-flex align-items-center gap-2 mb-3">
-    <i class="bi bi-calculator text-primary" />
-    <h6 class="mb-0">Withdraw Fee Calculator</h6>
+  <div class="mb-3 flex items-center gap-2">
+    <CalculatorOutlined />
+    <Title :level="5" class="mb-0">Withdraw Fee Calculator</Title>
   </div>
-  <button type="button" class="btn btn-outline-primary" @click="onCalculate">
-    <i class="bi bi-calculator me-2" />Calculate fee
-  </button>
-  <p v-if="feeResult" class="small text-muted mt-2 mb-0">{{ feeResult }}</p>
+  <Button @click="onCalculate">
+    <template #icon><CalculatorOutlined /></template>
+    Calculate fee
+  </Button>
+  <Text v-if="feeResult" class="mt-2 block text-sm">{{ feeResult }}</Text>
 </template>

@@ -1,47 +1,77 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export type MarketRow = {
-  market: string
-  lastPrice: string
-  change24: string
-  max24: string
-  min24: string
-  volume24: string
-}
+import { queryClient } from '@api/query-client'
+import { queryKeys } from '@api/query-keys'
+import * as marketApi from '@api/market'
+import type { MarketRow, PairStats, PlatformStat } from '@api/types'
 
-export type PlatformStat = {
-  id: string
-  icon: string
-  label: string
-  numericValue: number
-  suffix: string
-  prefix?: string
-}
+export type { MarketRow, PlatformStat, PairStats }
 
 export const useMarketStore = defineStore('market', () => {
   const activeCoin = ref('BTC')
+  const rows = ref<MarketRow[]>([])
+  const platformStats = ref<PlatformStat[]>([])
+  const pairStats = ref<PairStats | null>(null)
+  const isLoading = ref(false)
 
-  const rows = ref<MarketRow[]>([
-    { market: 'AE/BTC', lastPrice: '0.0001099', change24: '+2.4%', max24: '0.00012', min24: '0.00010', volume24: '120 BTC' },
-    { market: 'REP/BTC', lastPrice: '0.0001099', change24: '-1.1%', max24: '0.00012', min24: '0.00010', volume24: '80 BTC' },
-    { market: 'XTZ/BTC', lastPrice: '0.0001099', change24: '+0.8%', max24: '0.00012', min24: '0.00010', volume24: '200 BTC' },
-    { market: 'TIC/BTC', lastPrice: '0.0000451', change24: '+5.2%', max24: '0.00005', min24: '0.00004', volume24: '340 BTC' },
-  ])
-
-  const platformStats = ref<PlatformStat[]>([
-    { id: 'btc', icon: 'bi-graph-up', label: 'BTC Price', numericValue: 3429, suffix: ' USD', prefix: '$' },
-    { id: 'users', icon: 'bi-people', label: 'Active Users', numericValue: 2992, suffix: '' },
-    { id: 'volume', icon: 'bi-bar-chart', label: '24 Volume', numericValue: 151, suffix: ' BTC' },
-  ])
-
-  function bumpStat(id: string) {
-    const stat = platformStats.value.find((item) => item.id === id)
-    if (!stat) return
-
-    const delta = id === 'btc' ? (Math.random() > 0.5 ? 12 : -8) : Math.floor(Math.random() * 20) + 1
-    stat.numericValue = Math.max(0, stat.numericValue + delta)
+  async function fetchMarkets(quote?: string) {
+    isLoading.value = true
+    try {
+      const { data } = await queryClient.fetchQuery({
+        queryKey: queryKeys.markets(quote ?? 'all'),
+        queryFn: () => marketApi.fetchMarkets({ quote, live: true }),
+      })
+      rows.value = data.markets
+    } finally {
+      isLoading.value = false
+    }
   }
 
-  return { activeCoin, rows, platformStats, bumpStat }
+  async function fetchPlatformStats() {
+    const { data } = await queryClient.fetchQuery({
+      queryKey: queryKeys.platformStats,
+      queryFn: () => marketApi.fetchPlatformStats(true),
+    })
+    platformStats.value = data.stats
+  }
+
+  async function fetchPairStats() {
+    const { data } = await queryClient.fetchQuery({
+      queryKey: queryKeys.pairStats,
+      queryFn: () => marketApi.fetchPairStats(),
+    })
+    pairStats.value = data.stats
+  }
+
+  async function refreshLandingData() {
+    isLoading.value = true
+    try {
+      await Promise.all([fetchMarkets(), fetchPlatformStats()])
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  async function bumpStat(id: string) {
+    const { data } = await marketApi.refreshPlatformStat(id)
+    platformStats.value = data.stats
+    queryClient.setQueryData(queryKeys.platformStats, {
+      data: { stats: data.stats },
+      timestamp: new Date().toISOString(),
+    })
+  }
+
+  return {
+    activeCoin,
+    rows,
+    platformStats,
+    pairStats,
+    isLoading,
+    fetchMarkets,
+    fetchPlatformStats,
+    fetchPairStats,
+    refreshLandingData,
+    bumpStat,
+  }
 })

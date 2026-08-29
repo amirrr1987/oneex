@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Radio from 'ant-design-vue/es/radio'
 import { ref, watch } from 'vue'
 
 const props = withDefaults(
@@ -26,26 +27,18 @@ watch(
   },
 )
 
-function select(coin: string) {
-  active.value = coin
-  emit('update:modelValue', coin)
-}
+watch(active, (value) => emit('update:modelValue', value))
 </script>
 
 <template>
-  <ul class="nav nav-tabs nav-fill mb-0">
-    <li v-for="coin in coins" :key="coin" class="nav-item">
-      <button
-        type="button"
-        class="nav-link text-uppercase"
-        :class="{ active: active === coin }"
-        v-motion
-        :hover="{ scale: active === coin ? 1 : 1.03 }"
-        :tap="{ scale: 0.97 }"
-        @click="select(coin)"
-      >
-        {{ coin }}
-      </button>
-    </li>
-  </ul>
+  <Radio.Group v-model:value="active" button-style="solid" class="mb-0 flex w-full">
+    <Radio.Button
+      v-for="coin in coins"
+      :key="coin"
+      :value="coin"
+      class="flex-1 text-center uppercase"
+    >
+      {{ coin }}
+    </Radio.Button>
+  </Radio.Group>
 </template>

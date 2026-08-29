@@ -1,65 +1,136 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Alert from 'ant-design-vue/es/alert'
+import Button from 'ant-design-vue/es/button'
+import Card from 'ant-design-vue/es/card'
+import Form from 'ant-design-vue/es/form'
+import FormItem from 'ant-design-vue/es/form/FormItem'
+import InputNumber from 'ant-design-vue/es/input-number'
+import Radio from 'ant-design-vue/es/radio'
+import Tag from 'ant-design-vue/es/tag'
+import Typography from 'ant-design-vue/es/typography'
+import {
+  MinusCircleOutlined,
+  PauseCircleOutlined,
+  PercentageOutlined,
+  PlusCircleOutlined,
+  ShoppingCartOutlined,
+  SlidersOutlined,
+  StopOutlined,
+  ThunderboltOutlined,
+  WalletOutlined,
+} from '@ant-design/icons-vue'
+import { computed, ref } from 'vue'
+
+import { TRADING_PAIR } from '@/constants/exchange'
+import type { OrderSide, OrderType } from '@/stores/trading'
+import { useTradingStore } from '@/stores/trading'
+import { useWalletStore } from '@/stores/wallet'
+
+const { Title, Text } = Typography
+const trading = useTradingStore()
+const wallet = useWalletStore()
 
 const orderTypes = [
-  { id: 'Market', icon: 'bi-lightning' },
-  { id: 'Limit', icon: 'bi-sliders' },
-  { id: 'Stop', icon: 'bi-stop-circle' },
-  { id: 'Stop Limit', icon: 'bi-sign-stop' },
+  { id: 'Market', icon: ThunderboltOutlined },
+  { id: 'Limit', icon: SlidersOutlined },
+  { id: 'Stop', icon: StopOutlined },
+  { id: 'Stop Limit', icon: PauseCircleOutlined },
 ] as const
 
-const activeType = ref<(typeof orderTypes)[number]['id']>('Market')
+const activeType = ref<OrderType>('Market')
+const price = ref<number>()
+const amount = ref<number>()
+const successMessage = ref('')
+const errorMessage = ref('')
+
+const ethBalance = computed(() => wallet.getBalance('ETH'))
+const btcBalance = computed(() => wallet.getBalance('BTC'))
+
+async function place(side: OrderSide) {
+  successMessage.value = ''
+  errorMessage.value = ''
+
+  try {
+    const order = await trading.placeOrder({
+      type: activeType.value,
+      side,
+      amount: Number(amount.value),
+      price: activeType.value === 'Market' ? undefined : Number(price.value),
+    })
+    successMessage.value = `${side.toUpperCase()} order filled at ${order.price} BTC · fee ${order.fee.toFixed(8)} BTC`
+    amount.value = undefined
+    if (activeType.value !== 'Market') price.value = undefined
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'Order failed'
+  }
+}
 </script>
 
 <template>
-  <div class="card shadow-sm h-100">
-    <div class="card-header bg-white d-flex align-items-center justify-content-between">
-      <div class="d-flex align-items-center gap-2">
-        <i class="bi bi-plus-circle text-primary" />
-        <h6 class="mb-0">New Order</h6>
-        <span class="badge text-bg-secondary">ETH / BTC</span>
+  <Card class="h-full">
+    <template #title>
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center gap-2">
+          <PlusCircleOutlined />
+          <Title :level="5" class="mb-0">New Order</Title>
+          <Tag>{{ TRADING_PAIR.label }}</Tag>
+        </span>
+        <Tag color="blue">
+          <PercentageOutlined class="mr-1" />Fee {{ trading.feeRateLabel }}
+        </Tag>
       </div>
-      <span class="badge text-bg-primary"><i class="bi bi-percent me-1" />Fee 0.1%</span>
-    </div>
+    </template>
 
-    <div class="card-body">
-      <ul class="nav nav-tabs nav-fill mb-3" role="tablist">
-        <li v-for="type in orderTypes" :key="type.id" class="nav-item">
-          <button
-            type="button"
-            class="nav-link d-inline-flex align-items-center justify-content-center gap-1"
-            :class="{ active: activeType === type.id }"
-            @click="activeType = type.id"
-          >
-            <i :class="['bi', type.icon]" />
-            {{ type.id }}
-          </button>
-        </li>
-      </ul>
+    <Radio.Group v-model:value="activeType" button-style="solid" class="mb-3 flex w-full">
+      <Radio.Button
+        v-for="type in orderTypes"
+        :key="type.id"
+        :value="type.id"
+        class="flex-1 text-center"
+      >
+        <span class="inline-flex items-center justify-center gap-1">
+          <component :is="type.icon" />
+          {{ type.id }}
+        </span>
+      </Radio.Button>
+    </Radio.Group>
 
-      <fieldset class="mb-3">
-        <legend class="fs-6 text-muted"><i class="bi bi-wallet2 me-1" />Balances</legend>
-        <div class="row g-3">
-          <div v-for="side in ['buy', 'sell']" :key="side" class="col-md-6">
-            <form @submit.prevent>
-              <div v-for="index in 4" :key="index" class="mb-3">
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-input-cursor-text" /></span>
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-              <button
-                type="submit"
-                class="btn w-100 text-uppercase d-inline-flex align-items-center justify-content-center gap-2"
-                :class="side === 'buy' ? 'btn-success' : 'btn-danger'"
-              >
-                <i :class="side === 'buy' ? 'bi bi-cart-plus' : 'bi bi-cart-dash'" />
-                {{ side === 'buy' ? 'Buy LTC' : 'Sell LTC' }}
-              </button>
-            </form>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-  </div>
+    <fieldset class="mb-3">
+      <legend class="mb-2 text-sm">
+        <WalletOutlined class="mr-1" />Balances
+      </legend>
+      <Text class="mb-3 block text-sm">ETH: {{ ethBalance }} · BTC: {{ btcBalance }}</Text>
+
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+        <Form layout="vertical" @submit.prevent="place('buy')">
+          <FormItem v-if="activeType !== 'Market'" label="Limit price (BTC)">
+            <InputNumber v-model:value="price" class="w-full" :min="0" :step="0.0001" />
+          </FormItem>
+          <FormItem label="Amount (ETH)">
+            <InputNumber v-model:value="amount" class="w-full" :min="0" :step="0.0001" />
+          </FormItem>
+          <Button type="primary" block html-type="submit">
+            <template #icon><ShoppingCartOutlined /></template>
+            Buy ETH
+          </Button>
+        </Form>
+
+        <Form layout="vertical" @submit.prevent="place('sell')">
+          <FormItem v-if="activeType !== 'Market'" label="Limit price (BTC)">
+            <InputNumber v-model:value="price" class="w-full" :min="0" :step="0.0001" />
+          </FormItem>
+          <FormItem label="Amount (ETH)">
+            <InputNumber v-model:value="amount" class="w-full" :min="0" :step="0.0001" />
+          </FormItem>
+          <Button block danger html-type="submit">
+            <template #icon><MinusCircleOutlined /></template>
+            Sell ETH
+          </Button>
+        </Form>
+      </div>
+    </fieldset>
+
+    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon />
+    <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-2" />
+  </Card>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Button from 'ant-design-vue/es/button'
+import { CheckOutlined, CopyOutlined } from '@ant-design/icons-vue'
 import { computed } from 'vue'
 import { useClipboard } from '@vueuse/core'
 
@@ -6,13 +8,13 @@ const props = withDefaults(
   defineProps<{
     text: string
     label?: string
-    variant?: 'outline-secondary' | 'outline-primary' | 'primary'
-    size?: 'sm' | 'md'
+    type?: 'default' | 'primary' | 'dashed' | 'link' | 'text'
+    size?: 'small' | 'middle' | 'large'
   }>(),
   {
     label: 'Copy',
-    variant: 'outline-secondary',
-    size: 'md',
+    type: 'default',
+    size: 'middle',
   },
 )
 
@@ -26,14 +28,15 @@ async function onCopy() {
 </script>
 
 <template>
-  <button
-    type="button"
-    class="btn d-inline-flex align-items-center gap-1"
-    :class="[size === 'sm' ? 'btn-sm' : '', `btn-${variant}`]"
+  <Button
+    :type="type"
+    :size="size"
+    class="inline-flex items-center gap-1"
     :title="copied ? 'Copied!' : label"
     @click="onCopy"
   >
-    <i :class="copied ? 'bi bi-check2' : 'bi bi-clipboard'" />
-    <span v-if="size !== 'sm'" class="d-none d-sm-inline">{{ copied ? 'Copied' : label }}</span>
-  </button>
+    <CheckOutlined v-if="copied" />
+    <CopyOutlined v-else />
+    <span v-if="size !== 'small'" class="hidden sm:inline">{{ copied ? 'Copied' : label }}</span>
+  </Button>
 </template>

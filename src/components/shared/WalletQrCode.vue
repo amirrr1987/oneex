@@ -24,9 +24,9 @@ const qrcode = useQRCode(toRef(props, 'address'), {
       v-if="qrcode"
       :src="qrcode"
       :alt="`${coin ?? 'Wallet'} QR code`"
-      class="img-fluid rounded border bg-white p-2"
+      class="max-w-full rounded border p-2"
     />
-    <p v-if="coin" class="small text-muted mb-0 mt-2">{{ coin }} deposit QR</p>
+    <p v-if="coin" class="mt-2 mb-0 text-sm">{{ coin }} deposit QR</p>
   </div>
 </template>
 

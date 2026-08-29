@@ -1,25 +1,25 @@
 <script setup lang="ts">
+import Menu from 'ant-design-vue/es/menu'
+import { LockOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 const tabs = [
-  { label: 'Profile', to: '/profile', icon: 'bi-person' },
-  { label: 'Security', to: '/security', icon: 'bi-shield-lock' },
+  { label: 'Profile', to: '/profile', icon: UserOutlined },
+  { label: 'Security', to: '/security', icon: LockOutlined },
 ] as const
 
 const route = useRoute()
+const selectedKeys = computed(() => [route.path])
 </script>
 
 <template>
-  <ul class="nav nav-tabs nav-fill shadow-sm">
-    <li v-for="tab in tabs" :key="tab.to" class="nav-item">
-      <RouterLink
-        class="nav-link text-uppercase d-inline-flex align-items-center justify-content-center gap-2"
-        :class="{ active: route.path === tab.to }"
-        :to="tab.to"
-      >
-        <i :class="['bi', tab.icon]" />
+  <Menu mode="horizontal" :selected-keys="selectedKeys" class="w-full shadow-sm">
+    <Menu.Item v-for="tab in tabs" :key="tab.to">
+      <RouterLink :to="tab.to" class="inline-flex items-center justify-center gap-2 uppercase">
+        <component :is="tab.icon" />
         {{ tab.label }}
       </RouterLink>
-    </li>
-  </ul>
+    </Menu.Item>
+  </Menu>
 </template>

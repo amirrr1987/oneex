@@ -1,68 +1,83 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Alert from 'ant-design-vue/es/alert'
+import Button from 'ant-design-vue/es/button'
+import Form from 'ant-design-vue/es/form'
+import FormItem from 'ant-design-vue/es/form/FormItem'
+import Input from 'ant-design-vue/es/input'
+import { CheckCircleOutlined, IdcardOutlined, MailOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import { useZodForm } from '@/composables/useZodForm'
 import { profileSchema } from '@/schemas/forms'
+import { useAuthStore } from '@/stores/auth'
 
+const auth = useAuthStore()
+const { user } = storeToRefs(auth)
 const successMessage = ref('')
 
-const { values, fieldError, submit, isSubmitting } = useZodForm(profileSchema, {
-  firstName: 'John',
-  lastName: 'Doe',
+const { values, fieldError, submit, isSubmitting, reset } = useZodForm(profileSchema, {
+  firstName: user.value?.firstName ?? '',
+  lastName: user.value?.lastName ?? '',
+})
+
+watch(user, (next) => {
+  if (!next) return
+  reset({ firstName: next.firstName, lastName: next.lastName })
 })
 
 async function onSubmit() {
   successMessage.value = ''
   await submit(async () => {
-    successMessage.value = 'Profile updated successfully (demo).'
+    await auth.updateProfile(values.firstName, values.lastName)
+    successMessage.value = 'Profile updated successfully.'
   })
 }
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
-    <div class="mb-3">
-      <label class="form-label visually-hidden">Email</label>
-      <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-envelope" /></span>
-        <input type="email" class="form-control" value="user@oneex.com" disabled />
-      </div>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">First name</label>
-      <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-person" /></span>
-        <input
-          v-model="values.firstName"
-          type="text"
-          class="form-control"
-          :class="{ 'is-invalid': fieldError('firstName') }"
-          placeholder="First name"
-        />
-      </div>
-      <div v-if="fieldError('firstName')" class="invalid-feedback d-block">{{ fieldError('firstName') }}</div>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Last name</label>
-      <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-person-badge" /></span>
-        <input
-          v-model="values.lastName"
-          type="text"
-          class="form-control"
-          :class="{ 'is-invalid': fieldError('lastName') }"
-          placeholder="Last name"
-        />
-      </div>
-      <div v-if="fieldError('lastName')" class="invalid-feedback d-block">{{ fieldError('lastName') }}</div>
-    </div>
-    <div class="d-grid col-9 mx-auto">
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-        <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" />
-        <i v-else class="bi bi-check2-circle me-2" />
+  <Form layout="vertical" @submit.prevent="onSubmit">
+    <FormItem label="Email">
+      <Input type="email" :value="user?.email ?? ''" disabled>
+        <template #prefix>
+          <MailOutlined />
+        </template>
+      </Input>
+    </FormItem>
+
+    <FormItem
+      label="First name"
+      :validate-status="fieldError('firstName') ? 'error' : undefined"
+      :help="fieldError('firstName')"
+    >
+      <Input v-model:value="values.firstName" placeholder="First name">
+        <template #prefix>
+          <UserOutlined />
+        </template>
+      </Input>
+    </FormItem>
+
+    <FormItem
+      label="Last name"
+      :validate-status="fieldError('lastName') ? 'error' : undefined"
+      :help="fieldError('lastName')"
+    >
+      <Input v-model:value="values.lastName" placeholder="Last name">
+        <template #prefix>
+          <IdcardOutlined />
+        </template>
+      </Input>
+    </FormItem>
+
+    <div class="mx-auto w-3/4">
+      <Button type="primary" html-type="submit" block :loading="isSubmitting">
+        <template v-if="!isSubmitting" #icon>
+          <CheckCircleOutlined />
+        </template>
         Update profile
-      </button>
+      </Button>
     </div>
-    <div v-if="successMessage" class="alert alert-success mt-3 mb-0 py-2 small">{{ successMessage }}</div>
-  </form>
+
+    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon class="mt-3" />
+  </Form>
 </template>

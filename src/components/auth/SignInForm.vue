@@ -1,13 +1,23 @@
 <script setup lang="ts">
+import Alert from 'ant-design-vue/es/alert'
+import Button from 'ant-design-vue/es/button'
+import Form from 'ant-design-vue/es/form'
+import FormItem from 'ant-design-vue/es/form/FormItem'
+import Input from 'ant-design-vue/es/input'
+import { LoginOutlined, MailOutlined } from '@ant-design/icons-vue'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 
 import PasswordField from '@/components/shared/PasswordField.vue'
 import { useZodForm } from '@/composables/useZodForm'
 import { signInSchema } from '@/schemas/auth'
+import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
+const route = useRoute()
+const auth = useAuthStore()
 const successMessage = ref('')
+const errorMessage = ref('')
 
 const { values, fieldError, submit, isSubmitting } = useZodForm(signInSchema, {
   email: '',
@@ -16,60 +26,72 @@ const { values, fieldError, submit, isSubmitting } = useZodForm(signInSchema, {
 
 async function onSubmit() {
   successMessage.value = ''
+  errorMessage.value = ''
   const ok = await submit(async () => {
-    successMessage.value = 'Signed in successfully (demo).'
-    setTimeout(() => router.push('/exchange'), 800)
+    await auth.signIn(values.email, values.password)
+    successMessage.value = 'Signed in successfully.'
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/exchange'
+    setTimeout(() => router.push(redirect), 400)
   })
   if (!ok) successMessage.value = ''
 }
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
-    <div class="mb-3">
-      <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-envelope" /></span>
-        <input
-          v-model="values.email"
-          type="email"
-          class="form-control"
-          :class="{ 'is-invalid': fieldError('email') }"
-          placeholder="Enter email"
-        />
-      </div>
-      <div v-if="fieldError('email')" class="invalid-feedback d-block">{{ fieldError('email') }}</div>
-    </div>
-    <div class="mb-3">
+  <Form layout="vertical" @submit.prevent="onSubmit">
+    <FormItem
+      :validate-status="fieldError('email') ? 'error' : undefined"
+      :help="fieldError('email')"
+    >
+      <Input v-model:value="values.email" type="email" placeholder="Enter email">
+        <template #prefix>
+          <MailOutlined />
+        </template>
+      </Input>
+    </FormItem>
+
+    <FormItem
+      :validate-status="fieldError('password') ? 'error' : undefined"
+      :help="fieldError('password')"
+    >
       <PasswordField
         v-model="values.password"
         placeholder="Password"
         :invalid="Boolean(fieldError('password'))"
       />
-      <div v-if="fieldError('password')" class="invalid-feedback d-block">{{ fieldError('password') }}</div>
-    </div>
-    <p class="small text-muted">
+    </FormItem>
+
+    <p class="text-sm">
       Forgot password?
       <RouterLink to="/reset-password">Reset password</RouterLink>
     </p>
-    <p class="small text-muted d-none d-sm-block">
+
+    <p class="hidden text-sm sm:block">
       Not registered yet?
       <RouterLink to="/sign-up">Create account</RouterLink>
     </p>
-    <div class="d-grid col-9 mx-auto">
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-        <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" />
-        <i v-else class="bi bi-box-arrow-in-right me-2" />
+
+    <div class="mx-auto mt-4 w-3/4">
+      <Button type="primary" html-type="submit" block :loading="isSubmitting">
+        <template v-if="!isSubmitting" #icon>
+          <LoginOutlined />
+        </template>
         Sign in ONEEX
-      </button>
+      </Button>
     </div>
-    <div v-if="successMessage" class="alert alert-success mt-3 mb-0 py-2 small">{{ successMessage }}</div>
-    <div class="d-sm-none mt-3 text-center">
-      <p class="small text-muted">Not registered yet?</p>
-      <RouterLink class="btn btn-outline-primary w-75" to="/sign-up">Create Account</RouterLink>
+
+    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon class="mt-3" />
+    <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-3" />
+
+    <div class="mt-3 text-center sm:hidden">
+      <p class="text-sm">Not registered yet?</p>
+      <RouterLink to="/sign-up" class="mt-2 block">
+        <Button block>Create Account</Button>
+      </RouterLink>
     </div>
-    <p class="small text-center text-muted mt-4 mb-0">
-      Shall you encounter any problems logging in, please contact us at
-      <span class="text-primary">support.oneex.com</span>
+
+    <p class="mt-4 text-center text-sm">
+      Shall you encounter any problems logging in, please contact us at support.oneex.com
     </p>
-  </form>
+  </Form>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Button from 'ant-design-vue/es/button'
+import Layout from 'ant-design-vue/es/layout'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useWindowScroll } from '@vueuse/core'
@@ -12,18 +14,20 @@ const elevated = computed(() => y.value > 8)
 
 <template>
   <header class="mb-4">
-    <nav
-      class="navbar navbar-expand-sm navbar-light bg-white border-bottom"
+    <Layout.Header
+      class="flex items-center border-b px-4"
       :class="{ 'shadow-sm': elevated }"
     >
-      <div class="container">
-        <BrandLogo to="/" />
-        <div class="ms-auto d-flex align-items-center gap-2">
-          <ThemeToggle />
-          <RouterLink class="btn btn-outline-primary btn-sm" to="/sign-in">Sign in ONEEX</RouterLink>
-          <RouterLink class="btn btn-primary btn-sm" to="/sign-up">Create Account</RouterLink>
-        </div>
+      <BrandLogo to="/" />
+      <div class="ml-auto flex items-center gap-2">
+        <ThemeToggle />
+        <RouterLink to="/sign-in">
+          <Button size="small">Sign in ONEEX</Button>
+        </RouterLink>
+        <RouterLink to="/sign-up">
+          <Button type="primary" size="small">Create Account</Button>
+        </RouterLink>
       </div>
-    </nav>
+    </Layout.Header>
   </header>
 </template>

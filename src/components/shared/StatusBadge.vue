@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import Tag from 'ant-design-vue/es/tag'
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  InfoCircleOutlined,
+} from '@ant-design/icons-vue'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -9,22 +16,22 @@ const config = computed(() => {
   const value = props.status.toLowerCase()
 
   if (value.includes('complete') || value.includes('success')) {
-    return { class: 'text-bg-success', icon: 'bi-check-circle' }
+    return { color: 'success', icon: CheckCircleOutlined }
   }
   if (value.includes('pending') || value.includes('processing')) {
-    return { class: 'text-bg-warning', icon: 'bi-hourglass-split' }
+    return { color: 'warning', icon: ClockCircleOutlined }
   }
   if (value.includes('fail') || value.includes('cancel')) {
-    return { class: 'text-bg-danger', icon: 'bi-x-circle' }
+    return { color: 'error', icon: CloseCircleOutlined }
   }
 
-  return { class: 'text-bg-secondary', icon: 'bi-info-circle' }
+  return { color: 'default', icon: InfoCircleOutlined }
 })
 </script>
 
 <template>
-  <span class="badge d-inline-flex align-items-center gap-1" :class="config.class">
-    <i :class="['bi', config.icon]" />
+  <Tag :color="config.color" class="inline-flex items-center gap-1">
+    <component :is="config.icon" />
     {{ status }}
-  </span>
+  </Tag>
 </template>

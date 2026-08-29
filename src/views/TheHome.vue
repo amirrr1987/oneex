@@ -1,5 +1,28 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import Alert from 'ant-design-vue/es/alert'
+import Button from 'ant-design-vue/es/button'
+import Card from 'ant-design-vue/es/card'
+import Form from 'ant-design-vue/es/form'
+import FormItem from 'ant-design-vue/es/form/FormItem'
+import Input from 'ant-design-vue/es/input'
+import Spin from 'ant-design-vue/es/spin'
+import Typography from 'ant-design-vue/es/typography'
+import {
+  BarChartOutlined,
+  CheckCircleOutlined,
+  GiftOutlined,
+  KeyOutlined,
+  LineChartOutlined,
+  PercentageOutlined,
+  ReadOutlined,
+  ReloadOutlined,
+  SafetyCertificateOutlined,
+  StarOutlined,
+  TeamOutlined,
+} from '@ant-design/icons-vue'
+import type { Component } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useAsyncValidator } from '@vueuse/integrations/useAsyncValidator'
 import { useRouteQuery } from '@vueuse/router'
 import { storeToRefs } from 'pinia'
@@ -13,8 +36,14 @@ import ThemeToggle from '@/components/shared/ThemeToggle.vue'
 import BrandLogo from '@/components/shared/BrandLogo.vue'
 import { useMarketStore } from '@/stores/market'
 
+const { Title, Text, Paragraph } = Typography
+
 const market = useMarketStore()
 const { rows, platformStats } = storeToRefs(market)
+
+onMounted(() => {
+  void market.refreshLandingData()
+})
 
 const activeCoin = useRouteQuery('coin', 'BTC')
 const featureSlide = ref(0)
@@ -32,6 +61,12 @@ const { errorFields: newsletterErrors, execute: validateNewsletter } = useAsyncV
 
 const newsletterMessage = ref('')
 
+const statIconMap: Record<string, Component> = {
+  'line-chart': LineChartOutlined,
+  team: TeamOutlined,
+  'bar-chart': BarChartOutlined,
+}
+
 const columns = [
   { key: 'market' as const, label: 'Market' },
   { key: 'lastPrice' as const, label: 'Last Price' },
@@ -42,12 +77,36 @@ const columns = [
 ]
 
 const features = [
-  { title: 'Official Licenses', icon: 'bi-shield-check', text: 'ONEEX acquired all necessary official licenses for providing exchange services.' },
-  { title: 'ECC API', icon: 'bi-key', text: 'We store only the public key using EdDSA — no API secrets on our servers.' },
-  { title: 'Trade Mining', icon: 'bi-gem', text: 'Earn TIC tokens simply for trading on the platform every day.' },
-  { title: 'Lowest Fees', icon: 'bi-percent', text: '0% deposit fee and up to 0.05% maker/taker trading fee.' },
-  { title: 'Loyalty Program', icon: 'bi-gift', text: 'Hold TIC tokens and receive daily bounties in various cryptocurrencies.' },
-  { title: 'Media Object', icon: 'bi-newspaper', text: 'Stay informed with integrated market news and updates.' },
+  {
+    title: 'Official Licenses',
+    icon: SafetyCertificateOutlined,
+    text: 'ONEEX acquired all necessary official licenses for providing exchange services.',
+  },
+  {
+    title: 'ECC API',
+    icon: KeyOutlined,
+    text: 'We store only the public key using EdDSA — no API secrets on our servers.',
+  },
+  {
+    title: 'Trade Mining',
+    icon: StarOutlined,
+    text: 'Earn TIC tokens simply for trading on the platform every day.',
+  },
+  {
+    title: 'Lowest Fees',
+    icon: PercentageOutlined,
+    text: '0% deposit fee and up to 0.05% maker/taker trading fee.',
+  },
+  {
+    title: 'Loyalty Program',
+    icon: GiftOutlined,
+    text: 'Hold TIC tokens and receive daily bounties in various cryptocurrencies.',
+  },
+  {
+    title: 'Media Object',
+    icon: ReadOutlined,
+    text: 'Stay informed with integrated market news and updates.',
+  },
 ]
 
 const tokenBenefits = [
@@ -80,180 +139,178 @@ async function onNewsletterSubmit() {
     :initial="{ opacity: 0, y: 24 }"
     :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
   >
-    <div class="container">
-      <div class="row justify-content-center text-center mb-4">
-        <div class="col-lg-6">
-          <h1 class="text-uppercase fw-bold d-inline-flex align-items-center justify-content-center gap-3 flex-wrap">
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="mb-4 flex justify-center text-center">
+        <div class="max-w-2xl">
+          <Title :level="1" class="inline-flex flex-wrap items-center justify-center gap-3 uppercase">
             <BrandLogo to="/" :show-text="false" size="lg" />
             ONEEX
-            <br class="d-sm-none" />
+            <br class="sm:hidden" />
             Exchange of Tomorrow
-          </h1>
+          </Title>
         </div>
       </div>
-      <div class="row justify-content-center text-center mb-4">
-        <div class="col-lg-7">
-          <p class="text-muted mb-0">
+      <div class="mb-4 flex justify-center text-center">
+        <div class="max-w-3xl">
+          <Paragraph class="mb-0">
             ONEEX is a licensed trading platform for cryptocurrencies and assets, built on vanguard
             security infrastructure and a revolutionary reward system.
-          </p>
+          </Paragraph>
         </div>
       </div>
-      <div class="row justify-content-center d-none d-sm-flex">
-        <div class="col-lg-6">
-          <form class="row g-2" @submit.prevent="onNewsletterSubmit">
-            <div class="col-md-7">
-              <input
-                v-model="newsletterForm.email"
-                type="email"
-                class="form-control"
-                :class="{ 'is-invalid': newsletterErrors?.email?.length }"
-                placeholder="Enter Email Address"
-              />
-              <div v-if="newsletterErrors?.email?.length" class="invalid-feedback d-block">
-                {{ newsletterErrors.email[0]?.message }}
+      <div class="hidden justify-center sm:flex">
+        <div class="w-full max-w-2xl">
+          <Form @submit.prevent="onNewsletterSubmit">
+            <div class="grid grid-cols-1 gap-2 md:grid-cols-12">
+              <FormItem
+                class="md:col-span-7"
+                :validate-status="newsletterErrors?.email?.length ? 'error' : undefined"
+                :help="newsletterErrors?.email?.[0]?.message"
+              >
+                <Input
+                  v-model:value="newsletterForm.email"
+                  type="email"
+                  placeholder="Enter Email Address"
+                />
+              </FormItem>
+              <div class="md:col-span-5">
+                <Button type="primary" html-type="submit" block :disabled="!newsletterForm.email">
+                  Create Account
+                </Button>
               </div>
             </div>
-            <div class="col-md-5">
-              <button type="submit" class="btn btn-primary w-100" :disabled="!newsletterForm.email">
-                Create Account
-              </button>
-            </div>
-          </form>
-          <p v-if="newsletterMessage" class="small text-success mt-2 mb-0">{{ newsletterMessage }}</p>
+          </Form>
+          <Alert
+            v-if="newsletterMessage"
+            type="success"
+            :message="newsletterMessage"
+            show-icon
+            class="mt-2"
+          />
         </div>
       </div>
-      <div class="row justify-content-center d-sm-none g-2">
-        <div class="col-8">
-          <RouterLink class="btn btn-outline-primary w-100 mb-2" to="/sign-in">Sign in ONEEX</RouterLink>
-          <RouterLink class="btn btn-primary w-100" to="/sign-up">Create Account</RouterLink>
+      <div class="grid grid-cols-1 justify-center gap-2 sm:hidden">
+        <div class="mx-auto w-2/3">
+          <RouterLink to="/sign-in" class="mb-2 block">
+            <Button block>Sign in ONEEX</Button>
+          </RouterLink>
+          <RouterLink to="/sign-up" class="block">
+            <Button type="primary" block>Create Account</Button>
+          </RouterLink>
         </div>
       </div>
-      <div class="row justify-content-center mt-5 d-none d-md-block">
-        <div class="col-lg-10">
+      <div class="mt-5 hidden justify-center md:flex">
+        <div class="w-full max-w-5xl">
           <CoinTabs v-model="activeCoin" />
         </div>
       </div>
     </div>
   </section>
 
-  <section class="bg-light pb-5">
-    <div class="container">
-      <div class="row justify-content-center d-none d-md-flex">
-        <div class="col-lg-10">
-          <div class="card shadow-sm">
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <SortableTable :columns="columns" :rows="rows" row-key="market" />
-              </div>
-            </div>
-          </div>
+  <section class="pb-5">
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="hidden justify-center md:flex">
+        <div class="w-full max-w-5xl">
+          <Card>
+            <SortableTable :columns="columns" :rows="rows" row-key="market" />
+          </Card>
         </div>
       </div>
 
-      <div class="d-md-none">
+      <div class="md:hidden">
         <SwipeCarousel v-model="featureSlide" :length="rows.length">
           <div v-for="row in rows" :key="row.market" class="px-1">
-            <div class="card shadow-sm">
-              <div class="card-body">
-                <h5 class="mb-3">{{ row.market }}</h5>
-                <dl class="row small mb-0">
-                  <dt class="col-5 text-muted">Last Price</dt>
-                  <dd class="col-7">{{ row.lastPrice }}</dd>
-                  <dt class="col-5 text-muted">24 Change</dt>
-                  <dd class="col-7">{{ row.change24 }}</dd>
-                  <dt class="col-5 text-muted">Volume</dt>
-                  <dd class="col-7">{{ row.volume24 }}</dd>
-                </dl>
-              </div>
-            </div>
+            <Card>
+              <Title :level="5" class="mb-3">{{ row.market }}</Title>
+              <dl class="mb-0 grid grid-cols-12 gap-y-1 text-sm">
+                <dt class="col-span-5">Last Price</dt>
+                <dd class="col-span-7">{{ row.lastPrice }}</dd>
+                <dt class="col-span-5">24 Change</dt>
+                <dd class="col-span-7">{{ row.change24 }}</dd>
+                <dt class="col-span-5">Volume</dt>
+                <dd class="col-span-7">{{ row.volume24 }}</dd>
+              </dl>
+            </Card>
           </div>
         </SwipeCarousel>
-        <p class="text-center text-muted small mt-2 mb-0">Swipe markets left or right</p>
+        <Paragraph class="mt-2 text-center text-sm">Swipe markets left or right</Paragraph>
       </div>
     </div>
   </section>
 
   <section class="py-5">
-    <div class="container">
-      <div class="row g-4 text-center">
-        <div
+    <div class="mx-auto max-w-7xl px-4">
+      <div class="grid grid-cols-1 gap-4 text-center md:grid-cols-3">
+        <Card
           v-for="(stat, index) in platformStats"
           :key="stat.id"
           v-motion
-          class="col-md-4"
+          class="relative h-full"
           :initial="{ opacity: 0, y: 30 }"
           :enter="{ opacity: 1, y: 0, transition: { delay: index * 120, duration: 500 } }"
         >
-          <div class="card h-100 border-0 shadow-sm position-relative">
-            <div class="card-body">
-              <AppTooltip text="Refresh live stat">
-                <button
-                  type="button"
-                  class="btn btn-link position-absolute top-0 end-0 text-secondary"
-                  aria-label="Refresh"
-                  @click="refreshStat(stat.id)"
-                >
-                  <span v-if="refreshing[stat.id]" class="spinner-border spinner-border-sm" role="status" />
-                  <i v-else class="bi bi-arrow-clockwise" />
-                </button>
-              </AppTooltip>
-              <i :class="['bi', stat.icon, 'display-4', 'text-primary', 'mb-3']" />
-              <h4>
-                <AnimatedCounter
-                  :value="stat.numericValue"
-                  :prefix="stat.prefix"
-                  :suffix="stat.suffix"
-                />
-              </h4>
-              <p class="text-muted mb-0">{{ stat.label }}</p>
-            </div>
-          </div>
-        </div>
+          <AppTooltip text="Refresh live stat">
+            <Button
+              type="text"
+              class="absolute right-0 top-0"
+              aria-label="Refresh"
+              @click="refreshStat(stat.id)"
+            >
+              <Spin v-if="refreshing[stat.id]" size="small" />
+              <ReloadOutlined v-else />
+            </Button>
+          </AppTooltip>
+          <component :is="statIconMap[stat.icon] ?? BarChartOutlined" class="mb-3 text-5xl" />
+          <Title :level="4">
+            <AnimatedCounter
+              :value="stat.numericValue"
+              :prefix="stat.prefix"
+              :suffix="stat.suffix"
+            />
+          </Title>
+          <Paragraph class="mb-0">{{ stat.label }}</Paragraph>
+        </Card>
       </div>
     </div>
   </section>
 
-  <section class="bg-light py-5">
-    <div class="container">
-      <h3
+  <section class="py-5">
+    <div class="mx-auto max-w-7xl px-4">
+      <Title
         v-motion
-        class="text-center text-uppercase mb-5"
+        :level="3"
+        class="mb-5 text-center uppercase"
         :initial="{ opacity: 0 }"
         :visible="{ opacity: 1, transition: { duration: 500 } }"
       >
         Our Features and Benefits
-      </h3>
+      </Title>
 
-      <div class="row g-4 d-none d-md-flex">
-        <div
+      <div class="hidden grid-cols-1 gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
+        <Card
           v-for="(feature, index) in features"
           :key="feature.title"
           v-motion
-          class="col-md-6 col-lg-4"
+          class="h-full"
           :initial="{ opacity: 0, scale: 0.95 }"
           :enter="{ opacity: 1, scale: 1, transition: { delay: index * 80, duration: 450 } }"
         >
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <i :class="['bi', feature.icon, 'fs-1', 'text-primary', 'mb-3']" />
-              <h5 class="text-uppercase">{{ feature.title }}</h5>
-              <p class="text-muted small mb-0">{{ feature.text }}</p>
-            </div>
-          </div>
-        </div>
+          <component :is="feature.icon" class="mb-3 text-4xl" />
+          <Title :level="5" class="uppercase">{{ feature.title }}</Title>
+          <Paragraph class="mb-0 text-sm">{{ feature.text }}</Paragraph>
+        </Card>
       </div>
 
-      <div class="d-md-none">
+      <div class="md:hidden">
         <SwipeCarousel :length="features.length">
           <div v-for="feature in features" :key="feature.title" class="px-1">
-            <div class="card shadow-sm h-100">
-              <div class="card-body text-center">
-                <i :class="['bi', feature.icon, 'fs-1', 'text-primary', 'mb-3']" />
-                <h5 class="text-uppercase">{{ feature.title }}</h5>
-                <p class="text-muted small mb-0">{{ feature.text }}</p>
+            <Card class="h-full">
+              <div class="text-center">
+                <component :is="feature.icon" class="mb-3 text-4xl" />
+                <Title :level="5" class="uppercase">{{ feature.title }}</Title>
+                <Paragraph class="mb-0 text-sm">{{ feature.text }}</Paragraph>
               </div>
-            </div>
+            </Card>
           </div>
         </SwipeCarousel>
       </div>
@@ -262,40 +319,38 @@ async function onNewsletterSubmit() {
 
   <section
     v-motion
-    class="bg-secondary text-white py-5"
+    class="py-5"
     :initial="{ opacity: 0 }"
     :visible-once="{ opacity: 1, transition: { duration: 600 } }"
   >
-    <div class="container">
-      <h3 class="text-center text-uppercase mb-4">TIC Token</h3>
-      <div class="row g-4 align-items-start">
-        <div class="col-lg-6">
-          <p class="mb-0">
-            ONEEX created the TIC token to stimulate platform growth, serve users, and reward loyalty.
-          </p>
-        </div>
-        <div class="col-lg-6">
-          <ul class="list-unstyled mb-0">
-            <li v-for="benefit in tokenBenefits" :key="benefit" class="mb-2">
-              <i class="bi bi-check-circle me-2" />
-              {{ benefit }}
-            </li>
-          </ul>
-        </div>
+    <div class="mx-auto max-w-7xl px-4">
+      <Title :level="3" class="mb-4 text-center uppercase">TIC Token</Title>
+      <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
+        <Paragraph class="mb-0">
+          ONEEX created the TIC token to stimulate platform growth, serve users, and reward loyalty.
+        </Paragraph>
+        <ul class="mb-0 list-none pl-0">
+          <li v-for="benefit in tokenBenefits" :key="benefit" class="mb-2">
+            <CheckCircleOutlined class="mr-2" />
+            {{ benefit }}
+          </li>
+        </ul>
       </div>
-      <div class="text-center mt-5">
-        <RouterLink class="btn btn-primary btn-lg px-5" to="/get-tic-token">Get TIC Token</RouterLink>
+      <div class="mt-5 text-center">
+        <RouterLink to="/get-tic-token">
+          <Button type="primary" size="large" class="px-12">Get TIC Token</Button>
+        </RouterLink>
       </div>
     </div>
   </section>
 
   <section class="py-5">
-    <div class="container text-center">
-      <h3 class="text-uppercase mb-4">Customize Your Interface</h3>
-      <p class="text-muted col-lg-8 mx-auto mb-4">
+    <div class="mx-auto max-w-7xl px-4 text-center">
+      <Title :level="3" class="mb-4 uppercase">Customize Your Interface</Title>
+      <Paragraph class="mx-auto mb-4 max-w-3xl">
         Switch between day and night mode to make your ONEEX trading experience more comfortable.
         We believe our customers deserve better conditions and more custom settings.
-      </p>
+      </Paragraph>
       <ThemeToggle />
     </div>
   </section>

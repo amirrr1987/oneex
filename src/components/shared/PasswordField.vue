@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useToggle } from '@vueuse/core'
+import Input from 'ant-design-vue/es/input'
 
 defineProps<{
   modelValue: string
@@ -11,29 +11,15 @@ defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
-
-const [visible, toggleVisible] = useToggle(false)
 </script>
 
 <template>
-  <div class="input-group">
-    <input
-      :id="id"
-      :value="modelValue"
-      :type="visible ? 'text' : 'password'"
-      class="form-control"
-      :class="{ 'is-invalid': invalid }"
-      :placeholder="placeholder"
-      autocomplete="current-password"
-      @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-    />
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      :aria-label="visible ? 'Hide password' : 'Show password'"
-      @click="toggleVisible()"
-    >
-      <i :class="visible ? 'bi bi-eye-slash' : 'bi bi-eye'" />
-    </button>
-  </div>
+  <Input.Password
+    :id="id"
+    :value="modelValue"
+    :placeholder="placeholder"
+    :status="invalid ? 'error' : undefined"
+    autocomplete="current-password"
+    @update:value="emit('update:modelValue', $event)"
+  />
 </template>

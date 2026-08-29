@@ -1,63 +1,119 @@
+<script setup lang="ts">
+import Button from 'ant-design-vue/es/button'
+import Layout from 'ant-design-vue/es/layout'
+import Space from 'ant-design-vue/es/space'
+import Typography from 'ant-design-vue/es/typography'
+import {
+  ApiOutlined,
+  BankOutlined,
+  BookOutlined,
+  CopyrightOutlined,
+  EnvironmentOutlined,
+  FileTextOutlined,
+  InfoCircleOutlined,
+  InstagramOutlined,
+  LockOutlined,
+  MailOutlined,
+  PercentageOutlined,
+  PhoneOutlined,
+  SafetyCertificateOutlined,
+  SendOutlined,
+} from '@ant-design/icons-vue'
+import { RouterLink } from 'vue-router'
+
+const { Footer } = Layout
+const { Text } = Typography
+</script>
+
 <template>
-  <footer class="mt-5">
-    <div class="bg-secondary text-white py-5">
-      <div class="container">
-        <div class="row mb-4">
-          <div class="col-12 col-md-4 text-center text-md-end mb-3 mb-md-0">
-            <span class="d-block"><i class="bi bi-info-circle me-2" />About</span>
-            <span class="d-block"><i class="bi bi-shield-check me-2" />Security</span>
-            <span class="d-block"><i class="bi bi-percent me-2" />Fee Structure</span>
-            <span class="d-block"><i class="bi bi-code-slash me-2" />API docs</span>
-            <span class="d-block"><i class="bi bi-headset me-2" />Support</span>
+  <Footer class="mt-5 p-0">
+    <div class="py-5">
+      <div class="mx-auto max-w-7xl px-4">
+        <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div class="text-center md:text-right">
+            <Space direction="vertical" :size="4">
+              <span class="flex items-center justify-center gap-2 md:justify-end">
+                <InfoCircleOutlined />About
+              </span>
+              <span class="flex items-center justify-center gap-2 md:justify-end">
+                <SafetyCertificateOutlined />Security
+              </span>
+              <span class="flex items-center justify-center gap-2 md:justify-end">
+                <PercentageOutlined />Fee Structure
+              </span>
+              <span class="flex items-center justify-center gap-2 md:justify-end">
+                <ApiOutlined />API docs
+              </span>
+              <span class="flex items-center justify-center gap-2 md:justify-end">
+                <PhoneOutlined />Support
+              </span>
+            </Space>
           </div>
-          <div class="col-12 col-md-4 d-none d-md-flex justify-content-center align-items-start gap-2">
-            <a class="btn btn-light btn-sm rounded-circle p-2" href="#" aria-label="Telegram">
-              <i class="bi bi-telegram fs-5" />
-            </a>
-            <a class="btn btn-light btn-sm rounded-circle p-2" href="#" aria-label="WhatsApp">
-              <i class="bi bi-whatsapp fs-5" />
-            </a>
-            <a class="btn btn-light btn-sm rounded-circle p-2" href="#" aria-label="Instagram">
-              <i class="bi bi-instagram fs-5" />
-            </a>
+
+          <div class="hidden items-start justify-center gap-2 md:flex">
+            <Button shape="circle" href="#" aria-label="Telegram">
+              <template #icon><SendOutlined /></template>
+            </Button>
+            <Button shape="circle" href="#" aria-label="WhatsApp">
+              <template #icon><PhoneOutlined /></template>
+            </Button>
+            <Button shape="circle" href="#" aria-label="Instagram">
+              <template #icon><InstagramOutlined /></template>
+            </Button>
           </div>
-          <div class="col-12 col-md-4 text-center text-md-start">
-            <span class="d-block"><i class="bi bi-cookie me-2" />Cookie policy</span>
-            <span class="d-block"><i class="bi bi-file-text me-2" />Terms of use</span>
-            <span class="d-block"><i class="bi bi-bank me-2" />CDX</span>
-            <span class="d-block"><i class="bi bi-journal-text me-2" />Blog</span>
-            <span class="d-block"><i class="bi bi-lock me-2" />Privacy</span>
+
+          <div class="text-center md:text-left">
+            <Space direction="vertical" :size="4">
+              <span class="flex items-center justify-center gap-2 md:justify-start">
+                <FileTextOutlined />Cookie policy
+              </span>
+              <RouterLink to="/terms" class="flex items-center justify-center gap-2 md:justify-start">
+                <FileTextOutlined />Terms of use
+              </RouterLink>
+              <span class="flex items-center justify-center gap-2 md:justify-start">
+                <BankOutlined />CDX
+              </span>
+              <span class="flex items-center justify-center gap-2 md:justify-start">
+                <BookOutlined />Blog
+              </span>
+              <RouterLink to="/privacy" class="flex items-center justify-center gap-2 md:justify-start">
+                <LockOutlined />Privacy
+              </RouterLink>
+            </Space>
           </div>
         </div>
-        <div class="row justify-content-center">
-          <div class="col-12 col-md-8 text-center">
-            <address class="mb-2">
-              <i class="bi bi-geo-alt me-2" />
+
+        <div class="flex justify-center">
+          <div class="w-full max-w-3xl text-center">
+            <address class="mb-2 not-italic">
+              <EnvironmentOutlined class="mr-2" />
               #88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890
             </address>
-            <span class="d-block"><i class="bi bi-telephone me-2" />+9821 88 77 66 55</span>
-            <span class="d-block"><i class="bi bi-envelope me-2" />support@oneex.com</span>
+            <span class="block"><PhoneOutlined class="mr-2" />+9821 88 77 66 55</span>
+            <span class="block"><MailOutlined class="mr-2" />support@oneex.com</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="d-md-none py-3">
-      <ul class="list-inline text-center mb-0">
-        <li class="list-inline-item">
-          <a href="#" aria-label="Telegram"><i class="bi bi-telegram fs-4" /></a>
-        </li>
-        <li class="list-inline-item">
-          <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp fs-4" /></a>
-        </li>
-        <li class="list-inline-item">
-          <a href="#" aria-label="Instagram"><i class="bi bi-instagram fs-4" /></a>
-        </li>
-      </ul>
+    <div class="py-3 md:hidden">
+      <Space class="flex w-full justify-center">
+        <Button type="text" href="#" aria-label="Telegram">
+          <template #icon><SendOutlined class="text-xl" /></template>
+        </Button>
+        <Button type="text" href="#" aria-label="WhatsApp">
+          <template #icon><PhoneOutlined class="text-xl" /></template>
+        </Button>
+        <Button type="text" href="#" aria-label="Instagram">
+          <template #icon><InstagramOutlined class="text-xl" /></template>
+        </Button>
+      </Space>
     </div>
 
-    <div class="bg-dark text-white text-center py-2">
-      <small><i class="bi bi-c-circle me-1" />Copyright 2018. oneex. All Rights Reserved</small>
+    <div class="py-2 text-center">
+      <Text class="text-sm">
+        <CopyrightOutlined class="mr-1" />Copyright 2018. oneex. All Rights Reserved
+      </Text>
     </div>
-  </footer>
+  </Footer>
 </template>

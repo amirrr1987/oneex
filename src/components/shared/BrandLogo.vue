@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { AppstoreFilled } from '@ant-design/icons-vue'
 import { RouterLink } from 'vue-router'
 
 withDefaults(
@@ -14,29 +15,24 @@ withDefaults(
   },
 )
 
-const iconSize = {
-  sm: 'fs-5',
-  md: 'fs-4',
-  lg: 'fs-3',
+const textSize = {
+  sm: 'text-base',
+  md: 'text-lg',
+  lg: 'text-xl',
 } as const
 </script>
 
 <template>
-  <RouterLink :to="to" class="navbar-brand d-inline-flex align-items-center gap-2 fw-bold text-decoration-none">
+  <RouterLink
+    :to="to"
+    class="inline-flex items-center gap-2 font-bold no-underline"
+  >
     <span
-      class="brand-logo-mark d-inline-flex align-items-center justify-content-center rounded-circle bg-primary text-white"
-      :class="iconSize[size]"
+      class="inline-flex h-8 w-8 items-center justify-center rounded-full"
+      :class="textSize[size]"
     >
-      <i class="bi bi-hexagon-fill" />
+      <AppstoreFilled />
     </span>
     <span v-if="showText">ONEEX</span>
   </RouterLink>
 </template>
-
-<style scoped>
-.brand-logo-mark {
-  width: 2rem;
-  height: 2rem;
-  line-height: 1;
-}
-</style>

@@ -1,5 +1,8 @@
 import { z } from 'zod'
 
+import { ASSET_CONFIG, type SupportedCoin, type WithdrawPriority } from '@/constants/exchange'
+import { isValidAddress } from '@/utils/addresses'
+
 export const signInSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Enter a valid email'),
   password: z.string().min(8, 'Password must be at least 8 characters'),

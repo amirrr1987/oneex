@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import Button from 'ant-design-vue/es/button'
+import Typography from 'ant-design-vue/es/typography'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons-vue'
 import { useDrag } from '@vueuse/gesture'
 import { computed, ref, watch } from 'vue'
+
+const { Text } = Typography
 
 const props = withDefaults(
   defineProps<{
@@ -68,26 +73,24 @@ function goTo(next: number) {
         <slot />
       </div>
     </div>
-    <div v-if="length > 1" class="d-flex justify-content-center align-items-center gap-2 mt-3">
-      <button
-        type="button"
-        class="btn btn-sm btn-outline-secondary"
+    <div v-if="length > 1" class="mt-3 flex items-center justify-center gap-2">
+      <Button
+        size="small"
         :disabled="index === 0"
         aria-label="Previous slide"
         @click="goTo(index - 1)"
       >
-        <i class="bi bi-chevron-left" />
-      </button>
-      <span class="small text-muted">{{ index + 1 }} / {{ length }}</span>
-      <button
-        type="button"
-        class="btn btn-sm btn-outline-secondary"
+        <template #icon><LeftOutlined /></template>
+      </Button>
+      <Text class="text-sm">{{ index + 1 }} / {{ length }}</Text>
+      <Button
+        size="small"
         :disabled="index === length - 1"
         aria-label="Next slide"
         @click="goTo(index + 1)"
       >
-        <i class="bi bi-chevron-right" />
-      </button>
+        <template #icon><RightOutlined /></template>
+      </Button>
     </div>
   </div>
 </template>

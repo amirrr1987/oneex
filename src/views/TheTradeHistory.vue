@@ -1,76 +1,76 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Card from 'ant-design-vue/es/card'
+import Typography from 'ant-design-vue/es/typography'
+import { HistoryOutlined, SwapOutlined } from '@ant-design/icons-vue'
+import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
 import PanelPageTitle from '@/components/panel/PanelPageTitle.vue'
 import SwipeCarousel from '@/components/shared/SwipeCarousel.vue'
 import StatusBadge from '@/components/shared/StatusBadge.vue'
+import { useTradingStore } from '@/stores/trading'
 
-type TradeRow = {
-  id: number
-  fromTo: string
-  amountSend: string
-  amountReceive: string
-  dateTime: string
-  status: string
-}
-
+const { Title } = Typography
+const trading = useTradingStore()
+const { orders } = storeToRefs(trading)
 const slide = ref(0)
 
 const columns = [
-  { key: 'id' as const, label: '#' },
-  { key: 'fromTo' as const, label: 'From/To' },
-  { key: 'amountSend' as const, label: 'Amount Send' },
-  { key: 'amountReceive' as const, label: 'Amount Receive' },
+  { key: 'id' as const, label: 'ID' },
+  { key: 'fromTo' as const, label: 'Pair' },
+  { key: 'amountSend' as const, label: 'Amount' },
+  { key: 'amountReceive' as const, label: 'Price' },
   { key: 'dateTime' as const, label: 'Date/Time' },
   { key: 'status' as const, label: 'Status' },
 ]
 
-const rows: TradeRow[] = [
-  { id: 1, fromTo: 'BTC/ETH', amountSend: '0.1', amountReceive: '2.5', dateTime: '2024-01-01', status: 'Completed' },
-  { id: 2, fromTo: 'ETH/BTC', amountSend: '2.0', amountReceive: '0.08', dateTime: '2024-01-02', status: 'Completed' },
-  { id: 3, fromTo: 'TIC/BTC', amountSend: '100', amountReceive: '0.01', dateTime: '2024-01-03', status: 'Pending' },
-]
+const rows = computed(() =>
+  orders.value.map((order) => ({
+    id: order.id.slice(0, 8),
+    fromTo: order.pair,
+    amountSend: `${order.amount} ETH`,
+    amountReceive: `${order.price} BTC`,
+    dateTime: new Date(order.createdAt).toLocaleString(),
+    status: order.status,
+  })),
+)
 </script>
 
 <template>
-  <div class="container py-4">
-    <PanelPageTitle title="Trade History" icon="bi-clock-history" />
+  <div class="mx-auto max-w-7xl px-4 py-4">
+    <PanelPageTitle title="Trade History" :icon="HistoryOutlined" />
 
-    <div class="row justify-content-center d-none d-md-flex">
-      <div class="col-xl-10">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white d-flex align-items-center gap-2">
-            <i class="bi bi-arrow-left-right" />Trade History
-          </div>
-          <div class="card-body p-0">
-            <div class="table-responsive">
-              <SortableTable :columns="columns" :rows="rows" row-key="id" />
-            </div>
-          </div>
-        </div>
+    <div class="hidden justify-center md:flex">
+      <div class="w-full max-w-5xl">
+        <Card>
+          <template #title>
+            <span class="inline-flex items-center gap-2">
+              <SwapOutlined />Trade History
+            </span>
+          </template>
+          <SortableTable :columns="columns" :rows="rows" row-key="id" />
+        </Card>
       </div>
     </div>
 
-    <div class="d-md-none">
-      <SwipeCarousel v-model="slide" :length="rows.length">
+    <div class="md:hidden">
+      <SwipeCarousel v-model="slide" :length="rows.length || 1">
         <div v-for="row in rows" :key="row.id" class="px-1">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start mb-3">
-                <h5 class="mb-0">{{ row.fromTo }}</h5>
-                <StatusBadge :status="row.status" />
-              </div>
-              <dl class="row small mb-0">
-                <dt class="col-5 text-muted">Send</dt>
-                <dd class="col-7">{{ row.amountSend }}</dd>
-                <dt class="col-5 text-muted">Receive</dt>
-                <dd class="col-7">{{ row.amountReceive }}</dd>
-                <dt class="col-5 text-muted">Date</dt>
-                <dd class="col-7">{{ row.dateTime }}</dd>
-              </dl>
+          <Card>
+            <div class="mb-3 flex items-start justify-between">
+              <Title :level="5" class="mb-0">{{ row.fromTo }}</Title>
+              <StatusBadge :status="row.status" />
             </div>
-          </div>
+            <dl class="mb-0 grid grid-cols-12 gap-y-1 text-sm">
+              <dt class="col-span-5">Amount</dt>
+              <dd class="col-span-7">{{ row.amountSend }}</dd>
+              <dt class="col-span-5">Price</dt>
+              <dd class="col-span-7">{{ row.amountReceive }}</dd>
+              <dt class="col-span-5">Date</dt>
+              <dd class="col-span-7">{{ row.dateTime }}</dd>
+            </dl>
+          </Card>
         </div>
       </SwipeCarousel>
     </div>

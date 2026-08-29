@@ -1,18 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Card from 'ant-design-vue/es/card'
+import DatePicker from 'ant-design-vue/es/date-picker'
+import Radio from 'ant-design-vue/es/radio'
+import Select from 'ant-design-vue/es/select'
+import Spin from 'ant-design-vue/es/spin'
+import Typography from 'ant-design-vue/es/typography'
+import { BarChartOutlined, TableOutlined } from '@ant-design/icons-vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
 import PanelPageTitle from '@/components/panel/PanelPageTitle.vue'
+import { useMarketStore } from '@/stores/market'
 
-type ReportRow = {
-  market: string
-  lastPrice: string
-  change24: string
-  volume24: string
-}
+const { Text } = Typography
 
 const coins = ['ETH', 'BTC', 'USDT', 'EOS'] as const
 const activeCoin = ref<(typeof coins)[number]>('BTC')
+
+const market = useMarketStore()
+const { rows, isLoading } = storeToRefs(market)
 
 const columns = [
   { key: 'market' as const, label: 'Market' },
@@ -21,76 +28,79 @@ const columns = [
   { key: 'volume24' as const, label: '24 Volume' },
 ]
 
-const rows: ReportRow[] = [
-  { market: 'AE/BTC', lastPrice: '0.0012', change24: '+2%', volume24: '120 BTC' },
-  { market: 'XTZ/BTC', lastPrice: '0.0008', change24: '-1%', volume24: '80 BTC' },
-]
+const tableRows = computed(() =>
+  rows.value.map((row) => ({
+    market: row.market,
+    lastPrice: row.lastPrice,
+    change24: row.change24,
+    volume24: row.volume24,
+  })),
+)
+
+onMounted(() => {
+  void market.fetchMarkets(activeCoin.value)
+})
+
+watch(activeCoin, (coin) => {
+  void market.fetchMarkets(coin)
+})
 </script>
 
 <template>
-  <div class="container py-4">
-    <PanelPageTitle title="Reports" icon="bi-file-earmark-bar-graph" />
+  <div class="mx-auto max-w-7xl px-4 py-4">
+    <PanelPageTitle title="Reports" :icon="BarChartOutlined" />
 
-    <div class="row justify-content-center mb-3">
-      <div class="col-xl-10">
-        <ul class="nav nav-tabs nav-fill">
-          <li v-for="coin in coins" :key="coin" class="nav-item">
-            <button
-              type="button"
-              class="nav-link text-uppercase"
-              :class="{ active: activeCoin === coin }"
-              @click="activeCoin = coin"
-            >
-              {{ coin }}
-            </button>
-          </li>
-        </ul>
+    <div class="mb-3 flex justify-center">
+      <div class="w-full max-w-5xl">
+        <Radio.Group v-model:value="activeCoin" button-style="solid" class="flex w-full">
+          <Radio.Button
+            v-for="coin in coins"
+            :key="coin"
+            :value="coin"
+            class="flex-1 text-center uppercase"
+          >
+            {{ coin }}
+          </Radio.Button>
+        </Radio.Group>
       </div>
     </div>
 
-    <div class="row justify-content-center mb-4">
-      <div class="col-xl-10">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <div class="row g-3">
-              <div class="col-md-3">
-                <input type="date" class="form-control" />
-              </div>
-              <div class="col-md-3">
-                <input type="date" class="form-control" />
-              </div>
-              <div class="col-md-3">
-                <select class="form-select">
-                  <option>All Markets</option>
-                  <option>AE/BTC</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <select class="form-select">
-                  <option>All Actions</option>
-                  <option>Buy</option>
-                  <option>Sell</option>
-                </select>
-              </div>
-            </div>
+    <div class="mb-4 flex justify-center">
+      <div class="w-full max-w-5xl">
+        <Card>
+          <div class="grid grid-cols-1 gap-3 md:grid-cols-4">
+            <DatePicker class="w-full" />
+            <DatePicker class="w-full" />
+            <Select class="w-full" default-value="All Markets">
+              <Select.Option value="All Markets">All Markets</Select.Option>
+              <Select.Option value="AE/BTC">AE/BTC</Select.Option>
+            </Select>
+            <Select class="w-full" default-value="All Actions">
+              <Select.Option value="All Actions">All Actions</Select.Option>
+              <Select.Option value="Buy">Buy</Select.Option>
+              <Select.Option value="Sell">Sell</Select.Option>
+            </Select>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
 
-    <section class="bg-light py-4">
-      <div class="row justify-content-center">
-        <div class="col-xl-10">
-          <div class="card shadow-sm">
-            <div class="card-header d-flex align-items-center gap-2">
-              <i class="bi bi-file-earmark-spreadsheet" />{{ activeCoin }} Report
-            </div>
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <SortableTable :columns="columns" :rows="rows" row-key="market" />
-              </div>
-            </div>
-          </div>
+    <section class="py-4">
+      <div class="flex justify-center">
+        <div class="w-full max-w-5xl">
+          <Spin :spinning="isLoading">
+            <Card>
+              <template #title>
+                <span class="inline-flex items-center gap-2">
+                  <TableOutlined />Market Report · {{ activeCoin }}
+                </span>
+              </template>
+              <SortableTable :columns="columns" :rows="tableRows" row-key="market" />
+              <Text v-if="!tableRows.length" class="mt-3 block text-sm">
+                No markets found for {{ activeCoin }} quote.
+              </Text>
+            </Card>
+          </Spin>
         </div>
       </div>
     </section>

@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Card from 'ant-design-vue/es/card'
+import Radio from 'ant-design-vue/es/radio'
+import Spin from 'ant-design-vue/es/spin'
+import { RiseOutlined, StarOutlined } from '@ant-design/icons-vue'
+import { onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
 import BalanceStats from '@/components/panel/BalanceStats.vue'
 import PanelPageTitle from '@/components/panel/PanelPageTitle.vue'
-
-type MarketRow = {
-  market: string
-  lastPrice: string
-  change24: string
-  max24: string
-  min24: string
-  volume24: string
-}
+import { useMarketStore } from '@/stores/market'
 
 const tabs = ['Favorite', 'BTC', 'TIC', 'GVC', 'ETH'] as const
 const activeTab = ref<(typeof tabs)[number]>('BTC')
+
+const market = useMarketStore()
+const { rows, isLoading } = storeToRefs(market)
 
 const columns = [
   { key: 'market' as const, label: 'Market' },
@@ -26,55 +26,57 @@ const columns = [
   { key: 'volume24' as const, label: '24 Volume' },
 ]
 
-const rows: MarketRow[] = [
-  { market: 'AE/BTC', lastPrice: '0.0012', change24: '+2%', max24: '0.0015', min24: '0.0010', volume24: '120 BTC' },
-  { market: 'XTZ/BTC', lastPrice: '0.0008', change24: '-1%', max24: '0.0009', min24: '0.0007', volume24: '80 BTC' },
-  { market: 'TIC/BTC', lastPrice: '0.0003', change24: '+5%', max24: '0.0004', min24: '0.0002', volume24: '200 BTC' },
-]
+onMounted(() => {
+  void market.fetchMarkets('BTC')
+})
+
+watch(activeTab, (tab) => {
+  if (tab !== 'Favorite') void market.fetchMarkets(tab)
+})
 </script>
 
 <template>
-  <div class="container py-4">
-    <PanelPageTitle title="Markets" icon="bi-graph-up-arrow" />
+  <div class="mx-auto max-w-7xl px-4 py-4">
+    <PanelPageTitle title="Markets" :icon="RiseOutlined" />
 
-    <div class="row justify-content-center mb-4">
-      <div class="col-xl-9">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <BalanceStats />
-          </div>
-        </div>
+    <div class="mb-4 flex justify-center">
+      <div class="w-full max-w-4xl">
+        <Card>
+          <BalanceStats />
+        </Card>
       </div>
     </div>
 
-    <div class="row justify-content-center mb-3">
-      <div class="col-xl-10">
-        <ul class="nav nav-tabs nav-fill">
-          <li v-for="tab in tabs" :key="tab" class="nav-item">
-            <button
-              type="button"
-              class="nav-link text-uppercase"
-              :class="{ active: activeTab === tab }"
-              @click="activeTab = tab"
-            >
-              <i v-if="tab === 'Favorite'" class="bi bi-star me-1" />
-              {{ tab }}
-            </button>
-          </li>
-        </ul>
+    <div class="mb-3 flex justify-center">
+      <div class="w-full max-w-5xl">
+        <Radio.Group v-model:value="activeTab" button-style="solid" class="flex w-full">
+          <Radio.Button
+            v-for="tab in tabs"
+            :key="tab"
+            :value="tab"
+            class="flex-1 text-center uppercase"
+          >
+            <StarOutlined v-if="tab === 'Favorite'" class="mr-1" />
+            {{ tab }}
+          </Radio.Button>
+        </Radio.Group>
       </div>
     </div>
 
-    <section class="bg-light py-4">
-      <div class="row justify-content-center">
-        <div class="col-xl-10">
-          <div class="card shadow-sm">
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <SortableTable :columns="columns" :rows="rows" row-key="market" />
-              </div>
-            </div>
-          </div>
+    <section class="py-4">
+      <div class="flex justify-center">
+        <div class="w-full max-w-5xl">
+          <Spin :spinning="isLoading">
+            <Card>
+              <SortableTable
+                v-if="activeTab !== 'Favorite' || rows.length"
+                :columns="columns"
+                :rows="rows"
+                row-key="market"
+              />
+              <p v-else class="py-8 text-center text-sm">Add markets to favorites (demo).</p>
+            </Card>
+          </Spin>
         </div>
       </div>
     </section>

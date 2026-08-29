@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import { useAuthStore } from '@/stores/auth'
+
 const authRoute = (path: string, name: string, component: () => Promise<unknown>) => ({
   path,
+  meta: { guestOnly: true },
   component: () => import('@/layouts/AuthLayout.vue'),
   children: [{ path: '', name, component }],
 })
@@ -16,6 +19,7 @@ const router = createRouter({
     },
     {
       path: '/',
+      meta: { requiresAuth: true },
       component: () => import('@/layouts/PanelLayout.vue'),
       children: [
         { path: 'exchange', name: 'TheDashboard', component: () => import('@/views/TheDashboard.vue') },
@@ -48,7 +52,33 @@ const router = createRouter({
     authRoute('/sign-in', 'TheSignIn', () => import('@/views/auth/TheSignIn.vue')),
     authRoute('/sign-up', 'TheSignUp', () => import('@/views/auth/TheSignUp.vue')),
     authRoute('/reset-password', 'TheResetPassword', () => import('@/views/auth/TheResetPassword.vue')),
+    {
+      path: '/terms',
+      name: 'TheTerms',
+      component: () => import('@/views/legal/TheTerms.vue'),
+    },
+    {
+      path: '/privacy',
+      name: 'ThePrivacy',
+      component: () => import('@/views/legal/ThePrivacy.vue'),
+    },
   ],
+})
+
+router.beforeEach((to) => {
+  const auth = useAuthStore()
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+  const guestOnly = to.matched.some((record) => record.meta.guestOnly)
+
+  if (requiresAuth && !auth.isAuthenticated) {
+    return { name: 'TheSignIn', query: { redirect: to.fullPath } }
+  }
+
+  if (guestOnly && auth.isAuthenticated) {
+    return { name: 'TheDashboard' }
+  }
+
+  return true
 })
 
 export default router
