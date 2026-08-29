@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import Card from 'ant-design-vue/es/card'
+import Badge from 'ant-design-vue/es/badge'
 import Segmented from 'ant-design-vue/es/segmented'
+import Tag from 'ant-design-vue/es/tag'
+import { OrderedListOutlined } from '@ant-design/icons-vue'
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
+import { UiSection } from '@/ui'
 import { useTradingStore } from '@/stores/trading'
 
 const trading = useTradingStore()
@@ -43,11 +46,18 @@ const rows = computed(() => {
   }
   return mapped.filter((row) => row.status === 'Filled')
 })
+
+const filledCount = computed(() => orders.value.filter((o) => o.status === 'Filled').length)
 </script>
 
 <template>
-  <Card hoverable class="h-full">
-    <template #title>My Orders</template>
+  <UiSection title="My Orders" subtitle="Track open and filled orders">
+    <template #icon><OrderedListOutlined /></template>
+    <template #extra>
+      <Badge :count="filledCount" :overflow-count="99">
+        <Tag color="processing">{{ activeTab }}</Tag>
+      </Badge>
+    </template>
 
     <Segmented v-model:value="activeTab" block :options="[...tabs]" class="mb-4" />
 
@@ -57,5 +67,5 @@ const rows = computed(() => {
       row-key="id"
       empty-description="No orders in this category"
     />
-  </Card>
+  </UiSection>
 </template>

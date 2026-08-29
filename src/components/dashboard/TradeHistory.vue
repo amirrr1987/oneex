@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import Card from 'ant-design-vue/es/card'
 import Segmented from 'ant-design-vue/es/segmented'
-import Space from 'ant-design-vue/es/space'
-import Typography from 'ant-design-vue/es/typography'
+import Tag from 'ant-design-vue/es/tag'
 import { HistoryOutlined } from '@ant-design/icons-vue'
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
+import { UiSection } from '@/ui'
 import { useTradingStore } from '@/stores/trading'
 
-const { Title } = Typography
 const trading = useTradingStore()
 const { recentTrades, isLoading } = storeToRefs(trading)
 
@@ -48,12 +46,10 @@ const rows = computed(() => {
 </script>
 
 <template>
-  <Card hoverable class="h-full" :loading="isLoading && !recentTrades.length">
-    <template #title>
-      <Space>
-        <HistoryOutlined />
-        <Title :level="5" class="mb-0">Last 5 Trades</Title>
-      </Space>
+  <UiSection title="Last 5 Trades" subtitle="Recent fills on your account" :loading="isLoading && !recentTrades.length">
+    <template #icon><HistoryOutlined /></template>
+    <template #extra>
+      <Tag color="blue">Recent</Tag>
     </template>
 
     <Segmented v-model:value="activeTab" block :options="[...tabs]" class="mb-4" />
@@ -64,5 +60,5 @@ const rows = computed(() => {
       row-key="id"
       empty-description="No recent trades"
     />
-  </Card>
+  </UiSection>
 </template>

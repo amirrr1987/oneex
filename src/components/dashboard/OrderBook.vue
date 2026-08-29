@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import Alert from 'ant-design-vue/es/alert'
-import Card from 'ant-design-vue/es/card'
+import Col from 'ant-design-vue/es/col'
+import Row from 'ant-design-vue/es/row'
 import Tag from 'ant-design-vue/es/tag'
-import Typography from 'ant-design-vue/es/typography'
-import { BookOutlined } from '@ant-design/icons-vue'
+import { ArrowDownOutlined, ArrowUpOutlined, BookOutlined } from '@ant-design/icons-vue'
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { TRADING_PAIR } from '@/constants/exchange'
 import SortableTable from '@/components/dashboard/SortableTable.vue'
+import { TRADING_PAIR } from '@/constants/exchange'
+import { UiMetric, UiSection } from '@/ui'
 import { useTradingStore } from '@/stores/trading'
 
-const { Title } = Typography
 const trading = useTradingStore()
 const { orderBook, lastPrice } = storeToRefs(trading)
 
@@ -22,23 +23,42 @@ const columns = [
   { key: 'totalBtc' as const, label: 'Total (BTC)' },
   { key: 'amountEthAsk' as const, label: 'Amount (ETH)' },
 ]
+
+const bestBid = computed(() => orderBook.value[0]?.totalBid ?? '—')
+const spread = computed(() => {
+  const ask = Number(orderBook.value[0]?.askPrice)
+  const bid = Number(orderBook.value[0]?.totalBid)
+  if (!ask || !bid) return '—'
+  return `${((ask - bid) * 100).toFixed(4)}%`
+})
 </script>
 
 <template>
-  <Card hoverable class="h-full">
-    <template #title>
-      <span class="inline-flex items-center gap-2">
-        <BookOutlined />
-        <Title :level="5" class="mb-0">Order Book</Title>
-        <Tag>{{ TRADING_PAIR.label }}</Tag>
-      </span>
+  <UiSection title="Order Book" :subtitle="`Depth for ${TRADING_PAIR.label}`">
+    <template #icon><BookOutlined /></template>
+    <template #extra>
+      <Tag color="processing">Live</Tag>
     </template>
 
-    <SortableTable :columns="columns" :rows="orderBook" row-key="count" />
+    <Row :gutter="[12, 12]" class="mb-4">
+      <Col :xs="24" :sm="8">
+        <UiMetric title="Best Bid" :value="bestBid" suffix=" BTC" :icon="ArrowUpOutlined" trend="Buy side" trend-color="success" />
+      </Col>
+      <Col :xs="24" :sm="8">
+        <UiMetric title="Last Price" :value="lastPrice" suffix=" BTC" trend="Mid market" />
+      </Col>
+      <Col :xs="24" :sm="8">
+        <UiMetric title="Spread" :value="spread" :icon="ArrowDownOutlined" trend="Ask − Bid" trend-color="warning" />
+      </Col>
+    </Row>
 
-    <div class="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
-      <Alert type="info" :message="`Best bid ${orderBook[0]?.totalBid ?? '-'} BTC`" show-icon />
-      <Alert type="info" :message="`Last price ${lastPrice} BTC`" show-icon />
-    </div>
-  </Card>
+    <SortableTable :columns="columns" :rows="orderBook" row-key="count" empty-description="Order book loading..." />
+
+    <Alert
+      class="mt-4"
+      type="info"
+      show-icon
+      message="Demo order book — prices refresh with each trade on the exchange page."
+    />
+  </UiSection>
 </template>

@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import Card from 'ant-design-vue/es/card'
 import Empty from 'ant-design-vue/es/empty'
 import Input from 'ant-design-vue/es/input'
 import Segmented from 'ant-design-vue/es/segmented'
 import Space from 'ant-design-vue/es/space'
 import Spin from 'ant-design-vue/es/spin'
-import Typography from 'ant-design-vue/es/typography'
 import { DollarOutlined, SearchOutlined, StarOutlined } from '@ant-design/icons-vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
+import { UiSection } from '@/ui'
 import { useMarketStore } from '@/stores/market'
-
-const { Title } = Typography
 
 const market = useMarketStore()
 const { rows, isLoading } = storeToRefs(market)
@@ -71,19 +68,18 @@ const filteredRows = computed(() => {
 
 <template>
   <Spin :spinning="isLoading">
-    <Card hoverable class="h-full">
-      <template #title>
-        <Space>
-          <SearchOutlined />
-          <Title :level="5" class="mb-0">Instruments</Title>
-        </Space>
-      </template>
+    <UiSection title="Instruments" subtitle="Search and browse quote markets">
+      <template #icon><SearchOutlined /></template>
 
       <Space direction="vertical" class="w-full" :size="12">
-        <Input v-model:value="searchQuery" type="search" placeholder="Search markets..." allow-clear>
-          <template #prefix>
-            <SearchOutlined />
-          </template>
+        <Input
+          v-model:value="searchQuery"
+          type="search"
+          placeholder="Search markets..."
+          allow-clear
+          size="large"
+        >
+          <template #prefix><SearchOutlined /></template>
         </Input>
 
         <Segmented v-model:value="activeTab" block :options="tabOptions" />
@@ -96,6 +92,6 @@ const filteredRows = computed(() => {
         />
         <Empty v-else description="No markets match your search" />
       </Space>
-    </Card>
+    </UiSection>
   </Spin>
 </template>

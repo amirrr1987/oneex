@@ -49,10 +49,20 @@ export const authNav: NavItem[] = [
 ]
 
 export const footerLinks = {
-  product: ['About', 'Security', 'Fee Structure', 'API docs', 'Support'],
+  product: [
+    { label: 'About', icon: 'info' as const },
+    { label: 'Security', icon: 'security' as const },
+    { label: 'Fee Structure', icon: 'fee' as const },
+    { label: 'API docs', icon: 'api' as const },
+    { label: 'Support', icon: 'support' as const },
+  ],
   legal: [
-    { label: 'Terms of use', to: '/terms' },
-    { label: 'Privacy', to: '/privacy' },
-    { label: 'Cookie policy', to: '/privacy' },
+    { label: 'Terms of use', to: '/terms', icon: 'terms' as const },
+    { label: 'Privacy', to: '/privacy', icon: 'privacy' as const },
+    { label: 'Cookie policy', to: '/privacy', icon: 'cookie' as const },
+  ],
+  company: [
+    { label: 'CDX', icon: 'bank' as const },
+    { label: 'Blog', icon: 'blog' as const },
   ],
 }

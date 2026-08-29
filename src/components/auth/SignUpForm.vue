@@ -2,14 +2,21 @@
 import Alert from 'ant-design-vue/es/alert'
 import Button from 'ant-design-vue/es/button'
 import Checkbox from 'ant-design-vue/es/checkbox'
+import Col from 'ant-design-vue/es/col'
+import Divider from 'ant-design-vue/es/divider'
+import Flex from 'ant-design-vue/es/flex'
 import Form from 'ant-design-vue/es/form'
 import FormItem from 'ant-design-vue/es/form/FormItem'
 import Input from 'ant-design-vue/es/input'
+import Row from 'ant-design-vue/es/row'
+import Space from 'ant-design-vue/es/space'
+import Typography from 'ant-design-vue/es/typography'
 import {
   FileTextOutlined,
   IdcardOutlined,
   LockOutlined,
   MailOutlined,
+  SafetyCertificateOutlined,
   UserAddOutlined,
   UserOutlined,
 } from '@ant-design/icons-vue'
@@ -21,6 +28,7 @@ import { useZodForm } from '@/composables/useZodForm'
 import { signUpSchema } from '@/schemas/auth'
 import { useAuthStore } from '@/stores/auth'
 
+const { Text, Link } = Typography
 const router = useRouter()
 const auth = useAuthStore()
 const successMessage = ref('')
@@ -51,7 +59,7 @@ async function onSubmit() {
       firstName: values.firstName,
       lastName: values.lastName,
     })
-    successMessage.value = 'Account created. Redirecting…'
+    successMessage.value = 'Account created. Redirecting to exchange…'
     setTimeout(() => router.push('/exchange'), 500)
   })
   if (!ok) successMessage.value = ''
@@ -60,53 +68,64 @@ async function onSubmit() {
 
 <template>
   <Form layout="vertical" @submit.prevent="onSubmit">
-    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-      <FormItem
-        :validate-status="fieldError('firstName') ? 'error' : undefined"
-        :help="fieldError('firstName')"
-      >
-        <Input v-model:value="values.firstName" placeholder="First name">
-          <template #prefix>
-            <UserOutlined />
-          </template>
-        </Input>
-      </FormItem>
+    <Alert
+      type="info"
+      show-icon
+      class="mb-4"
+      message="Create your ONEEX account to trade, deposit, and earn TIC rewards."
+    >
+      <template #icon><SafetyCertificateOutlined /></template>
+    </Alert>
 
-      <FormItem
-        :validate-status="fieldError('lastName') ? 'error' : undefined"
-        :help="fieldError('lastName')"
-      >
-        <Input v-model:value="values.lastName" placeholder="Last name">
-          <template #prefix>
-            <IdcardOutlined />
-          </template>
-        </Input>
-      </FormItem>
-    </div>
+    <Row :gutter="16">
+      <Col :xs="24" :md="12">
+        <FormItem
+          label="First name"
+          :validate-status="fieldError('firstName') ? 'error' : undefined"
+          :help="fieldError('firstName')"
+        >
+          <Input v-model:value="values.firstName" placeholder="First name" size="large">
+            <template #prefix><UserOutlined /></template>
+          </Input>
+        </FormItem>
+      </Col>
+      <Col :xs="24" :md="12">
+        <FormItem
+          label="Last name"
+          :validate-status="fieldError('lastName') ? 'error' : undefined"
+          :help="fieldError('lastName')"
+        >
+          <Input v-model:value="values.lastName" placeholder="Last name" size="large">
+            <template #prefix><IdcardOutlined /></template>
+          </Input>
+        </FormItem>
+      </Col>
+    </Row>
 
     <FormItem
+      label="Email"
       :validate-status="fieldError('email') ? 'error' : undefined"
       :help="fieldError('email')"
     >
-      <Input v-model:value="values.email" type="email" placeholder="Enter email">
-        <template #prefix>
-          <MailOutlined />
-        </template>
+      <Input v-model:value="values.email" type="email" placeholder="you@example.com" size="large">
+        <template #prefix><MailOutlined /></template>
       </Input>
     </FormItem>
 
     <FormItem
+      label="Password"
       :validate-status="fieldError('password') ? 'error' : undefined"
       :help="fieldError('password')"
     >
       <PasswordField
         v-model="values.password"
-        placeholder="Password"
+        placeholder="Create a strong password"
         :invalid="Boolean(fieldError('password'))"
       />
     </FormItem>
 
     <FormItem
+      label="Confirm password"
       :validate-status="fieldError('confirmPassword') ? 'error' : undefined"
       :help="fieldError('confirmPassword')"
     >
@@ -122,45 +141,45 @@ async function onSubmit() {
       :help="fieldError('terms')"
     >
       <Checkbox v-model:checked="values.terms">
-        <span class="inline-flex items-center gap-1 text-sm">
+        <Space wrap>
           <FileTextOutlined />
-          I agree to
-          <RouterLink to="/terms">Terms</RouterLink>,
-          Cookie and
-          <RouterLink to="/privacy">Privacy</RouterLink>
-          policies
-        </span>
+          <Text>I agree to</Text>
+          <Link><RouterLink to="/terms">Terms</RouterLink></Link>
+          <Text>and</Text>
+          <Link><RouterLink to="/privacy">Privacy</RouterLink></Link>
+        </Space>
       </Checkbox>
     </FormItem>
 
     <FormItem
+      label="Captcha"
       :validate-status="fieldError('captcha') ? 'error' : undefined"
-      :help="fieldError('captcha') || `Captcha code: ${auth.demoCaptcha}`"
+      :help="fieldError('captcha') || `Demo code: ${auth.demoCaptcha}`"
     >
-      <Input v-model:value="values.captcha" placeholder="Captcha">
-        <template #prefix>
-          <LockOutlined />
-        </template>
+      <Input v-model:value="values.captcha" placeholder="Enter captcha" size="large">
+        <template #prefix><LockOutlined /></template>
       </Input>
     </FormItem>
 
-    <div class="mx-auto w-3/4">
-      <Button type="primary" html-type="submit" block :loading="isSubmitting">
-        <template v-if="!isSubmitting" #icon>
-          <UserAddOutlined />
-        </template>
-        Create account
-      </Button>
-    </div>
+    <Divider />
 
-    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon class="mt-3" />
-    <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-3" />
+    <Button type="primary" html-type="submit" block size="large" :loading="isSubmitting">
+      <template v-if="!isSubmitting" #icon><UserAddOutlined /></template>
+      Create ONEEX Account
+    </Button>
 
-    <div class="mt-3 text-center sm:hidden">
-      <p class="text-sm">Already have an account?</p>
-      <RouterLink to="/sign-in" class="mt-2 block">
-        <Button block>Sign In</Button>
+    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon class="mt-4" />
+    <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-4" />
+
+    <Flex vertical align="center" gap="small" class="mt-4 sm:hidden">
+      <Text type="secondary">Already have an account?</Text>
+      <RouterLink to="/sign-in" class="w-full">
+        <Button block size="large">Sign In</Button>
       </RouterLink>
-    </div>
+    </Flex>
+
+    <Text type="secondary" class="mt-4 block text-center">
+      Need help? Contact support@oneex.com
+    </Text>
   </Form>
 </template>
