@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import Alert from 'ant-design-vue/es/alert'
 import Button from 'ant-design-vue/es/button'
-import Card from 'ant-design-vue/es/card'
+import Descriptions from 'ant-design-vue/es/descriptions'
+import Divider from 'ant-design-vue/es/divider'
 import Form from 'ant-design-vue/es/form'
 import FormItem from 'ant-design-vue/es/form/FormItem'
 import InputNumber from 'ant-design-vue/es/input-number'
-import Radio from 'ant-design-vue/es/radio'
+import Segmented from 'ant-design-vue/es/segmented'
+import Space from 'ant-design-vue/es/space'
+import Tabs from 'ant-design-vue/es/tabs'
 import Tag from 'ant-design-vue/es/tag'
-import Typography from 'ant-design-vue/es/typography'
 import {
   MinusCircleOutlined,
   PauseCircleOutlined,
@@ -25,8 +27,8 @@ import { TRADING_PAIR } from '@/constants/exchange'
 import type { OrderSide, OrderType } from '@/stores/trading'
 import { useTradingStore } from '@/stores/trading'
 import { useWalletStore } from '@/stores/wallet'
+import { UiSection } from '@/ui'
 
-const { Title, Text } = Typography
 const trading = useTradingStore()
 const wallet = useWalletStore()
 
@@ -38,10 +40,13 @@ const orderTypes = [
 ] as const
 
 const activeType = ref<OrderType>('Market')
+const activeSide = ref<OrderSide>('buy')
 const price = ref<number>()
 const amount = ref<number>()
 const successMessage = ref('')
 const errorMessage = ref('')
+
+const orderTypeOptions = orderTypes.map((type) => ({ label: type.id, value: type.id }))
 
 const ethBalance = computed(() => wallet.getBalance('ETH'))
 const btcBalance = computed(() => wallet.getBalance('BTC'))
@@ -64,45 +69,38 @@ async function place(side: OrderSide) {
     errorMessage.value = error instanceof Error ? error.message : 'Order failed'
   }
 }
+
+function submitCurrentSide() {
+  void place(activeSide.value)
+}
 </script>
 
 <template>
-  <Card class="h-full">
-    <template #title>
-      <div class="flex items-center justify-between">
-        <span class="inline-flex items-center gap-2">
-          <PlusCircleOutlined />
-          <Title :level="5" class="mb-0">New Order</Title>
-          <Tag>{{ TRADING_PAIR.label }}</Tag>
-        </span>
-        <Tag color="blue">
-          <PercentageOutlined class="mr-1" />Fee {{ trading.feeRateLabel }}
-        </Tag>
-      </div>
+  <UiSection title="New Order" :subtitle="TRADING_PAIR.label">
+    <template #icon><PlusCircleOutlined /></template>
+    <template #extra>
+      <Tag color="blue">
+        <PercentageOutlined class="mr-1" />
+        Fee {{ trading.feeRateLabel }}
+      </Tag>
     </template>
 
-    <Radio.Group v-model:value="activeType" button-style="solid" class="mb-3 flex w-full">
-      <Radio.Button
-        v-for="type in orderTypes"
-        :key="type.id"
-        :value="type.id"
-        class="flex-1 text-center"
-      >
-        <span class="inline-flex items-center justify-center gap-1">
-          <component :is="type.icon" />
-          {{ type.id }}
-        </span>
-      </Radio.Button>
-    </Radio.Group>
+    <Segmented v-model:value="activeType" block :options="orderTypeOptions" class="mb-4" />
 
-    <fieldset class="mb-3">
-      <legend class="mb-2 text-sm">
-        <WalletOutlined class="mr-1" />Balances
-      </legend>
-      <Text class="mb-3 block text-sm">ETH: {{ ethBalance }} · BTC: {{ btcBalance }}</Text>
+    <Descriptions bordered size="small" :column="2" class="mb-4">
+      <template #title>
+        <Space>
+          <WalletOutlined />
+          Available balances
+        </Space>
+      </template>
+      <Descriptions.Item label="ETH">{{ ethBalance }}</Descriptions.Item>
+      <Descriptions.Item label="BTC">{{ btcBalance }}</Descriptions.Item>
+    </Descriptions>
 
-      <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <Form layout="vertical" @submit.prevent="place('buy')">
+    <Tabs v-model:active-key="activeSide" class="mb-2">
+      <Tabs.TabPane key="buy" tab="Buy ETH">
+        <Form layout="vertical" @submit.prevent="submitCurrentSide">
           <FormItem v-if="activeType !== 'Market'" label="Limit price (BTC)">
             <InputNumber v-model:value="price" class="w-full" :min="0" :step="0.0001" />
           </FormItem>
@@ -114,8 +112,10 @@ async function place(side: OrderSide) {
             Buy ETH
           </Button>
         </Form>
+      </Tabs.TabPane>
 
-        <Form layout="vertical" @submit.prevent="place('sell')">
+      <Tabs.TabPane key="sell" tab="Sell ETH">
+        <Form layout="vertical" @submit.prevent="submitCurrentSide">
           <FormItem v-if="activeType !== 'Market'" label="Limit price (BTC)">
             <InputNumber v-model:value="price" class="w-full" :min="0" :step="0.0001" />
           </FormItem>
@@ -127,10 +127,12 @@ async function place(side: OrderSide) {
             Sell ETH
           </Button>
         </Form>
-      </div>
-    </fieldset>
+      </Tabs.TabPane>
+    </Tabs>
+
+    <Divider class="my-3" />
 
     <Alert v-if="successMessage" type="success" :message="successMessage" show-icon />
     <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-2" />
-  </Card>
+  </UiSection>
 </template>

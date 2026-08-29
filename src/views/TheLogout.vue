@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import Alert from 'ant-design-vue/es/alert'
 import Button from 'ant-design-vue/es/button'
-import Card from 'ant-design-vue/es/card'
-import Typography from 'ant-design-vue/es/typography'
+import Flex from 'ant-design-vue/es/flex'
+import Result from 'ant-design-vue/es/result'
+import Space from 'ant-design-vue/es/space'
 import { LogoutOutlined } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 
-import PanelPageTitle from '@/components/panel/PanelPageTitle.vue'
+import { UiPage } from '@/ui'
 import { useAuthStore } from '@/stores/auth'
 
-const { Paragraph } = Typography
 const auth = useAuthStore()
 const router = useRouter()
 
@@ -20,25 +19,20 @@ function onLogout() {
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl px-4 py-5">
-    <PanelPageTitle title="Logout" :icon="LogoutOutlined" />
-    <div class="flex justify-center">
-      <div class="w-full max-w-md">
-        <Card class="text-center">
-          <LogoutOutlined class="mb-3 text-5xl" />
-          <Paragraph class="mb-4">Are you sure you want to log out of your ONEEX account?</Paragraph>
-          <div class="flex justify-center gap-2">
-            <Button @click="router.push('/exchange')">Cancel</Button>
-            <Button danger type="primary" @click="onLogout">Logout</Button>
-          </div>
-          <Alert
-            type="info"
-            message="Session cleared locally. Protected pages require sign-in again."
-            show-icon
-            class="mt-4 text-left"
-          />
-        </Card>
-      </div>
-    </div>
-  </div>
+  <UiPage title="Logout" :icon="LogoutOutlined" subtitle="End your current session">
+    <Flex justify="center">
+      <Result
+        status="warning"
+        title="Log out of ONEEX?"
+        sub-title="Session cleared locally. Protected pages require sign-in again."
+      >
+        <template #extra>
+          <Space>
+            <Button @click="router.push('/exchange')">Stay signed in</Button>
+            <Button danger type="primary" @click="onLogout">Log out</Button>
+          </Space>
+        </template>
+      </Result>
+    </Flex>
+  </UiPage>
 </template>

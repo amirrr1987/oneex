@@ -1,25 +1,22 @@
 <script setup lang="ts">
 import Card from 'ant-design-vue/es/card'
-import Radio from 'ant-design-vue/es/radio'
-import Typography from 'ant-design-vue/es/typography'
-import { UnorderedListOutlined } from '@ant-design/icons-vue'
+import Segmented from 'ant-design-vue/es/segmented'
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
 import { useTradingStore } from '@/stores/trading'
 
-const { Title } = Typography
 const trading = useTradingStore()
 const { orders } = storeToRefs(trading)
 
 const tabs = [
-  { id: 'active', label: 'Active' },
-  { id: 'filled', label: 'Filled' },
-  { id: 'canceled', label: 'Canceled' },
+  { label: 'Active', value: 'active' },
+  { label: 'Filled', value: 'filled' },
+  { label: 'Canceled', value: 'canceled' },
 ] as const
 
-const activeTab = ref<(typeof tabs)[number]['id']>('filled')
+const activeTab = ref<(typeof tabs)[number]['value']>('filled')
 
 const columns = [
   { key: 'id' as const, label: 'ID' },
@@ -49,25 +46,16 @@ const rows = computed(() => {
 </script>
 
 <template>
-  <Card class="h-full">
-    <template #title>
-      <span class="inline-flex items-center gap-2">
-        <UnorderedListOutlined />
-        <Title :level="5" class="mb-0">My Order</Title>
-      </span>
-    </template>
+  <Card hoverable class="h-full">
+    <template #title>My Orders</template>
 
-    <Radio.Group v-model:value="activeTab" button-style="solid" class="mb-3 flex w-full">
-      <Radio.Button
-        v-for="tab in tabs"
-        :key="tab.id"
-        :value="tab.id"
-        class="flex-1 text-center"
-      >
-        {{ tab.label }}
-      </Radio.Button>
-    </Radio.Group>
+    <Segmented v-model:value="activeTab" block :options="[...tabs]" class="mb-4" />
 
-    <SortableTable :columns="columns" :rows="rows" row-key="id" />
+    <SortableTable
+      :columns="columns"
+      :rows="rows"
+      row-key="id"
+      empty-description="No orders in this category"
+    />
   </Card>
 </template>

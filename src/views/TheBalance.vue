@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import Card from 'ant-design-vue/es/card'
-import Input from 'ant-design-vue/es/input'
+import Button from 'ant-design-vue/es/button'
+import Col from 'ant-design-vue/es/col'
+import Flex from 'ant-design-vue/es/flex'
 import Progress from 'ant-design-vue/es/progress'
+import Row from 'ant-design-vue/es/row'
+import Space from 'ant-design-vue/es/space'
 import Typography from 'ant-design-vue/es/typography'
 import {
+  ArrowRightOutlined,
   DashboardOutlined,
   DownloadOutlined,
   UploadOutlined,
@@ -13,7 +17,7 @@ import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import BalanceStats from '@/components/panel/BalanceStats.vue'
-import PanelPageTitle from '@/components/panel/PanelPageTitle.vue'
+import { UiPage, UiSection } from '@/ui'
 import { DAILY_WITHDRAW_LIMIT_USDT } from '@/constants/exchange'
 import { useWalletStore } from '@/stores/wallet'
 
@@ -27,58 +31,53 @@ const withdrawProgress = computed(() => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl px-4 py-4">
-    <PanelPageTitle title="Balance" :icon="WalletOutlined" />
+  <UiPage
+    title="Balance"
+    :icon="WalletOutlined"
+    subtitle="Overview of your assets and daily limits"
+    badge="Portfolio"
+  >
+    <BalanceStats />
 
-    <div class="mb-4 flex justify-center">
-      <div class="w-full max-w-4xl">
-        <Card>
-          <BalanceStats />
-        </Card>
-      </div>
-    </div>
-
-    <div class="mb-4 flex justify-center">
-      <div class="w-full max-w-4xl">
-        <Card>
-          <Progress :percent="withdrawProgress" class="mb-3" />
-          <Text class="block text-center">
-            <DashboardOutlined class="mr-2" />
-            {{ wallet.remainingDailyWithdrawLimit() }} USDT remaining of
-            {{ DAILY_WITHDRAW_LIMIT_USDT }} daily withdrawal limit
-          </Text>
-        </Card>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <Card>
-        <template #title>
-          <span class="inline-flex items-center gap-2">
-            <DownloadOutlined />Deposit funds
-          </span>
-        </template>
-        <Text class="mb-4 block text-sm">
-          Generate your personal deposit address and track blockchain confirmations.
+    <UiSection title="Daily withdrawal limit" subtitle="Resets every 24 hours in USDT equivalent">
+      <Space direction="vertical" class="w-full" :size="12">
+        <Progress :percent="withdrawProgress" stroke-color="#6366f1" />
+        <Text type="secondary">
+          <DashboardOutlined class="mr-2" />
+          {{ wallet.remainingDailyWithdrawLimit() }} USDT remaining of
+          {{ DAILY_WITHDRAW_LIMIT_USDT }}
         </Text>
-        <RouterLink to="/deposit">
-          <span>Open deposit page</span>
-        </RouterLink>
-      </Card>
+      </Space>
+    </UiSection>
 
-      <Card>
-        <template #title>
-          <span class="inline-flex items-center gap-2">
-            <UploadOutlined />Withdraw funds
-          </span>
-        </template>
-        <Text class="mb-4 block text-sm">
-          Withdraw to an external wallet with network fee and daily limit checks.
-        </Text>
-        <RouterLink to="/withdraw">
-          <span>Open withdraw page</span>
-        </RouterLink>
-      </Card>
-    </div>
-  </div>
+    <Row :gutter="[16, 16]">
+      <Col :xs="24" :md="12">
+        <UiSection title="Deposit funds" subtitle="Unique address with live confirmations">
+          <template #icon><DownloadOutlined /></template>
+          <Flex vertical gap="middle">
+            <RouterLink to="/deposit">
+              <Button type="primary" block>
+                Open deposit
+                <ArrowRightOutlined />
+              </Button>
+            </RouterLink>
+          </Flex>
+        </UiSection>
+      </Col>
+
+      <Col :xs="24" :md="12">
+        <UiSection title="Withdraw funds" subtitle="Network fee and daily limit checks">
+          <template #icon><UploadOutlined /></template>
+          <Flex vertical gap="middle">
+            <RouterLink to="/withdraw">
+              <Button type="primary" block>
+                Open withdraw
+                <ArrowRightOutlined />
+              </Button>
+            </RouterLink>
+          </Flex>
+        </UiSection>
+      </Col>
+    </Row>
+  </UiPage>
 </template>

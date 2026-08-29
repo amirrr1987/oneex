@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import Card from 'ant-design-vue/es/card'
+import Col from 'ant-design-vue/es/col'
 import DatePicker from 'ant-design-vue/es/date-picker'
-import Radio from 'ant-design-vue/es/radio'
+import Row from 'ant-design-vue/es/row'
+import Segmented from 'ant-design-vue/es/segmented'
 import Select from 'ant-design-vue/es/select'
+import Space from 'ant-design-vue/es/space'
 import Spin from 'ant-design-vue/es/spin'
 import Typography from 'ant-design-vue/es/typography'
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons-vue'
@@ -10,7 +13,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import SortableTable from '@/components/dashboard/SortableTable.vue'
-import PanelPageTitle from '@/components/panel/PanelPageTitle.vue'
+import { UiPage } from '@/ui'
 import { useMarketStore } from '@/stores/market'
 
 const { Text } = Typography
@@ -20,6 +23,8 @@ const activeCoin = ref<(typeof coins)[number]>('BTC')
 
 const market = useMarketStore()
 const { rows, isLoading } = storeToRefs(market)
+
+const coinOptions = computed(() => coins.map((coin) => ({ label: coin, value: coin })))
 
 const columns = [
   { key: 'market' as const, label: 'Market' },
@@ -47,62 +52,46 @@ watch(activeCoin, (coin) => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl px-4 py-4">
-    <PanelPageTitle title="Reports" :icon="BarChartOutlined" />
+  <UiPage title="Reports" :icon="BarChartOutlined" subtitle="Historical market performance">
+    <Segmented v-model:value="activeCoin" block :options="coinOptions" />
 
-    <div class="mb-3 flex justify-center">
-      <div class="w-full max-w-5xl">
-        <Radio.Group v-model:value="activeCoin" button-style="solid" class="flex w-full">
-          <Radio.Button
-            v-for="coin in coins"
-            :key="coin"
-            :value="coin"
-            class="flex-1 text-center uppercase"
-          >
-            {{ coin }}
-          </Radio.Button>
-        </Radio.Group>
-      </div>
-    </div>
+    <Card hoverable>
+      <Row :gutter="[16, 16]">
+        <Col :xs="24" :md="6">
+          <DatePicker class="w-full" placeholder="From date" />
+        </Col>
+        <Col :xs="24" :md="6">
+          <DatePicker class="w-full" placeholder="To date" />
+        </Col>
+        <Col :xs="24" :md="6">
+          <Select class="w-full" default-value="All Markets" placeholder="Market">
+            <Select.Option value="All Markets">All Markets</Select.Option>
+            <Select.Option value="AE/BTC">AE/BTC</Select.Option>
+          </Select>
+        </Col>
+        <Col :xs="24" :md="6">
+          <Select class="w-full" default-value="All Actions" placeholder="Action">
+            <Select.Option value="All Actions">All Actions</Select.Option>
+            <Select.Option value="Buy">Buy</Select.Option>
+            <Select.Option value="Sell">Sell</Select.Option>
+          </Select>
+        </Col>
+      </Row>
+    </Card>
 
-    <div class="mb-4 flex justify-center">
-      <div class="w-full max-w-5xl">
-        <Card>
-          <div class="grid grid-cols-1 gap-3 md:grid-cols-4">
-            <DatePicker class="w-full" />
-            <DatePicker class="w-full" />
-            <Select class="w-full" default-value="All Markets">
-              <Select.Option value="All Markets">All Markets</Select.Option>
-              <Select.Option value="AE/BTC">AE/BTC</Select.Option>
-            </Select>
-            <Select class="w-full" default-value="All Actions">
-              <Select.Option value="All Actions">All Actions</Select.Option>
-              <Select.Option value="Buy">Buy</Select.Option>
-              <Select.Option value="Sell">Sell</Select.Option>
-            </Select>
-          </div>
-        </Card>
-      </div>
-    </div>
-
-    <section class="py-4">
-      <div class="flex justify-center">
-        <div class="w-full max-w-5xl">
-          <Spin :spinning="isLoading">
-            <Card>
-              <template #title>
-                <span class="inline-flex items-center gap-2">
-                  <TableOutlined />Market Report · {{ activeCoin }}
-                </span>
-              </template>
-              <SortableTable :columns="columns" :rows="tableRows" row-key="market" />
-              <Text v-if="!tableRows.length" class="mt-3 block text-sm">
-                No markets found for {{ activeCoin }} quote.
-              </Text>
-            </Card>
-          </Spin>
-        </div>
-      </div>
-    </section>
-  </div>
+    <Spin :spinning="isLoading">
+      <Card hoverable>
+        <template #title>
+          <Space>
+            <TableOutlined />
+            Market Report · {{ activeCoin }}
+          </Space>
+        </template>
+        <SortableTable :columns="columns" :rows="tableRows" row-key="market" />
+        <Text v-if="!tableRows.length" type="secondary" class="mt-3 block">
+          No markets found for {{ activeCoin }} quote.
+        </Text>
+      </Card>
+    </Spin>
+  </UiPage>
 </template>

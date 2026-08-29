@@ -2,8 +2,14 @@
 import Alert from 'ant-design-vue/es/alert'
 import Button from 'ant-design-vue/es/button'
 import Card from 'ant-design-vue/es/card'
+import Col from 'ant-design-vue/es/col'
+import Divider from 'ant-design-vue/es/divider'
+import Empty from 'ant-design-vue/es/empty'
+import Flex from 'ant-design-vue/es/flex'
 import Input from 'ant-design-vue/es/input'
 import List from 'ant-design-vue/es/list'
+import Row from 'ant-design-vue/es/row'
+import Space from 'ant-design-vue/es/space'
 import Spin from 'ant-design-vue/es/spin'
 import Tag from 'ant-design-vue/es/tag'
 import Typography from 'ant-design-vue/es/typography'
@@ -13,7 +19,7 @@ import { storeToRefs } from 'pinia'
 
 import { ASSET_CONFIG, type SupportedCoin } from '@/constants/exchange'
 import CoinTabs from '@/components/panel/CoinTabs.vue'
-import PanelPageTitle from '@/components/panel/PanelPageTitle.vue'
+import { UiPage } from '@/ui'
 import CopyButton from '@/components/shared/CopyButton.vue'
 import WalletQrCode from '@/components/shared/WalletQrCode.vue'
 import { useWalletStore } from '@/stores/wallet'
@@ -49,81 +55,82 @@ async function queueDemoDeposit() {
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl px-4 py-4">
-    <PanelPageTitle title="Deposit" :icon="DownloadOutlined" />
+  <UiPage
+    title="Deposit"
+    :icon="DownloadOutlined"
+    subtitle="Send crypto to your unique ONEEX address"
+  >
+    <template #toolbar>
+      <CoinTabs v-model="activeCoin" />
+    </template>
 
-    <div class="mb-3 flex justify-center">
-      <div class="w-full max-w-5xl">
-        <CoinTabs v-model="activeCoin" />
-      </div>
-    </div>
+    <Card hoverable>
+      <Alert
+        type="info"
+        show-icon
+        class="mb-4"
+        :message="`Min ${config.minDeposit} ${activeCoin} · ${config.confirmations} confirmations required`"
+      />
 
-    <section class="py-4">
-      <div class="flex justify-center">
-        <div class="w-full max-w-5xl">
-          <Card>
-            <Title :level="5">
-              <InfoCircleOutlined class="mr-2" />
-              Min deposit: {{ config.minDeposit }} {{ activeCoin }} · Required confirmations:
-              {{ config.confirmations }}
-            </Title>
-            <Paragraph class="text-sm">
-              This address is unique to your ONEEX account. Funds are credited only after the required
-              block confirmations.
-            </Paragraph>
+      <Paragraph>
+        This address is unique to your ONEEX account. Funds are credited only after the required
+        block confirmations.
+      </Paragraph>
 
-            <div class="grid grid-cols-1 items-center gap-4 md:grid-cols-12">
-              <div class="md:col-span-4">
-                <WalletQrCode :address="walletAddress" :coin="activeCoin" />
-              </div>
-              <div class="md:col-span-8">
-                <Text class="mb-2 block">Your deposit address</Text>
-                <Input :value="walletAddress" readonly class="font-mono">
-                  <template #prefix>
-                    <WalletOutlined />
-                  </template>
-                  <template #addonAfter>
-                    <CopyButton :text="walletAddress" size="small" />
-                  </template>
-                </Input>
-              </div>
-            </div>
-
-            <div class="mt-4 flex flex-wrap items-end gap-2">
-              <Input
-                v-model:value="depositAmount"
-                class="max-w-xs"
-                :placeholder="`Simulate incoming ${activeCoin}`"
-              />
-              <Button @click="queueDemoDeposit">Simulate on-chain deposit</Button>
-              <Button :disabled="isRefreshing" @click="wallet.refreshDeposits()">
-                <Spin v-if="isRefreshing" size="small" class="mr-2" />
-                <ReloadOutlined v-else class="mr-2" />
-                Refresh confirmations
-              </Button>
-            </div>
-
-            <Alert v-if="infoMessage" type="info" :message="infoMessage" show-icon class="mt-3" />
-            <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-3" />
-
-            <List
-              v-if="pendingDeposits.length"
-              class="mt-4"
-              header="Pending deposits"
-              :data-source="pendingDeposits"
-              bordered
-            >
-              <template #renderItem="{ item }">
-                <List.Item>
-                  <span>{{ item.amount }} {{ item.coin }}</span>
-                  <Tag>{{ item.confirmations }}/{{ item.requiredConfirmations }} confirmations</Tag>
-                  <Tag :color="item.status === 'Confirmed' ? 'success' : 'processing'">{{ item.status }}</Tag>
-                </List.Item>
+      <Row :gutter="[24, 24]" align="middle">
+        <Col :xs="24" :md="8">
+          <WalletQrCode :address="walletAddress" :coin="activeCoin" />
+        </Col>
+        <Col :xs="24" :md="16">
+          <Space direction="vertical" class="w-full" :size="8">
+            <Text strong>Your deposit address</Text>
+            <Input :value="walletAddress" readonly>
+              <template #prefix>
+                <WalletOutlined />
               </template>
-            </List>
-          </Card>
-        </div>
-      </div>
-    </section>
-  </div>
+              <template #addonAfter>
+                <CopyButton :text="walletAddress" size="small" />
+              </template>
+            </Input>
+          </Space>
+        </Col>
+      </Row>
+
+      <Divider />
+
+      <Flex wrap="wrap" gap="small" align="end">
+        <Input
+          v-model:value="depositAmount"
+          :placeholder="`Simulate incoming ${activeCoin}`"
+        />
+        <Button type="primary" @click="queueDemoDeposit">Simulate deposit</Button>
+        <Button :disabled="isRefreshing" @click="wallet.refreshDeposits()">
+          <Spin v-if="isRefreshing" size="small" />
+          <ReloadOutlined v-else />
+          Refresh confirmations
+        </Button>
+      </Flex>
+
+      <Alert v-if="infoMessage" type="success" :message="infoMessage" show-icon class="mt-4" />
+      <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-4" />
+
+      <Title :level="5" class="mt-6">Pending deposits</Title>
+      <List
+        v-if="pendingDeposits.length"
+        :data-source="pendingDeposits"
+        bordered
+      >
+        <template #renderItem="{ item }">
+          <List.Item>
+            <List.Item.Meta :title="`${item.amount} ${item.coin}`" />
+            <Space>
+              <Tag>{{ item.confirmations }}/{{ item.requiredConfirmations }} confirmations</Tag>
+              <Tag :color="item.status === 'Confirmed' ? 'success' : 'processing'">{{ item.status }}</Tag>
+            </Space>
+          </List.Item>
+        </template>
+      </List>
+      <Empty v-else description="No pending deposits" />
+    </Card>
+  </UiPage>
 </template>

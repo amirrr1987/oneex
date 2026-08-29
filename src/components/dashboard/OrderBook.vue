@@ -25,7 +25,7 @@ const columns = [
 </script>
 
 <template>
-  <Card class="h-full">
+  <Card hoverable class="h-full">
     <template #title>
       <span class="inline-flex items-center gap-2">
         <BookOutlined />

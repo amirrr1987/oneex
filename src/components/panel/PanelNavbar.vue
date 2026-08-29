@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import Button from 'ant-design-vue/es/button'
 import Dropdown from 'ant-design-vue/es/dropdown'
+import Flex from 'ant-design-vue/es/flex'
 import Layout from 'ant-design-vue/es/layout'
 import Menu from 'ant-design-vue/es/menu'
-import { LogoutOutlined, UserOutlined } from '@ant-design/icons-vue'
+import {
+  BarChartOutlined,
+  DownloadOutlined,
+  HistoryOutlined,
+  LineChartOutlined,
+  LogoutOutlined,
+  SwapOutlined,
+  UserOutlined,
+  WalletOutlined,
+} from '@ant-design/icons-vue'
 import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
@@ -15,8 +25,8 @@ const selectedKeys = computed(() => [route.path])
 </script>
 
 <template>
-  <header class="mb-4">
-    <Layout.Header class="flex flex-wrap items-center gap-2 border-b px-4">
+  <Layout.Header class="border-b px-4">
+    <Flex align="center" gap="middle" wrap="wrap">
       <BrandLogo to="/exchange" />
 
       <Menu
@@ -25,15 +35,30 @@ const selectedKeys = computed(() => [route.path])
         class="min-w-0 flex-1 border-none bg-transparent"
       >
         <Menu.Item key="/exchange">
-          <RouterLink to="/exchange">Exchange</RouterLink>
+          <RouterLink to="/exchange" class="inline-flex items-center gap-2">
+            <SwapOutlined />
+            Exchange
+          </RouterLink>
         </Menu.Item>
         <Menu.Item key="/markets">
-          <RouterLink to="/markets">Markets</RouterLink>
+          <RouterLink to="/markets" class="inline-flex items-center gap-2">
+            <LineChartOutlined />
+            Markets
+          </RouterLink>
         </Menu.Item>
         <Menu.Item key="/balance">
-          <RouterLink to="/balance">Balance</RouterLink>
+          <RouterLink to="/balance" class="inline-flex items-center gap-2">
+            <WalletOutlined />
+            Balance
+          </RouterLink>
         </Menu.Item>
-        <Menu.SubMenu key="transaction" title="Transaction">
+        <Menu.SubMenu key="transaction">
+          <template #title>
+            <span class="inline-flex items-center gap-2">
+              <DownloadOutlined />
+              Transaction
+            </span>
+          </template>
           <Menu.Item key="/deposit">
             <RouterLink to="/deposit">Deposit</RouterLink>
           </Menu.Item>
@@ -45,14 +70,20 @@ const selectedKeys = computed(() => [route.path])
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item key="/trade-history">
-          <RouterLink to="/trade-history">Trade History</RouterLink>
+          <RouterLink to="/trade-history" class="inline-flex items-center gap-2">
+            <HistoryOutlined />
+            Trade History
+          </RouterLink>
         </Menu.Item>
         <Menu.Item key="/reports">
-          <RouterLink to="/reports">Reports</RouterLink>
+          <RouterLink to="/reports" class="inline-flex items-center gap-2">
+            <BarChartOutlined />
+            Reports
+          </RouterLink>
         </Menu.Item>
       </Menu>
 
-      <div class="ml-auto flex items-center gap-2">
+      <Flex align="center" gap="small">
         <ThemeToggle />
         <Dropdown :trigger="['click', 'hover']">
           <Button type="text" aria-label="Account menu" title="Account menu">
@@ -82,7 +113,7 @@ const selectedKeys = computed(() => [route.path])
         <RouterLink to="/get-tic-token">
           <Button type="primary">Get TIC Token</Button>
         </RouterLink>
-      </div>
-    </Layout.Header>
-  </header>
+      </Flex>
+    </Flex>
+  </Layout.Header>
 </template>

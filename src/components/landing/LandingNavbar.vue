@@ -1,33 +1,26 @@
 <script setup lang="ts">
 import Button from 'ant-design-vue/es/button'
+import Flex from 'ant-design-vue/es/flex'
 import Layout from 'ant-design-vue/es/layout'
-import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { useWindowScroll } from '@vueuse/core'
 
 import BrandLogo from '@/components/shared/BrandLogo.vue'
 import ThemeToggle from '@/components/shared/ThemeToggle.vue'
-
-const { y } = useWindowScroll()
-const elevated = computed(() => y.value > 8)
 </script>
 
 <template>
-  <header class="mb-4">
-    <Layout.Header
-      class="flex items-center border-b px-4"
-      :class="{ 'shadow-sm': elevated }"
-    >
+  <Layout.Header class="border-b px-4">
+    <Flex align="center" justify="space-between">
       <BrandLogo to="/" />
-      <div class="ml-auto flex items-center gap-2">
+      <Flex align="center" gap="small">
         <ThemeToggle />
         <RouterLink to="/sign-in">
-          <Button size="small">Sign in ONEEX</Button>
+          <Button>Sign in ONEEX</Button>
         </RouterLink>
         <RouterLink to="/sign-up">
-          <Button type="primary" size="small">Create Account</Button>
+          <Button type="primary">Create Account</Button>
         </RouterLink>
-      </div>
-    </Layout.Header>
-  </header>
+      </Flex>
+    </Flex>
+  </Layout.Header>
 </template>

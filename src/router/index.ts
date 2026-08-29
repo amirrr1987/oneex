@@ -54,13 +54,13 @@ const router = createRouter({
     authRoute('/reset-password', 'TheResetPassword', () => import('@/views/auth/TheResetPassword.vue')),
     {
       path: '/terms',
-      name: 'TheTerms',
-      component: () => import('@/views/legal/TheTerms.vue'),
+      component: () => import('@/ui/layouts/PublicLayout.vue'),
+      children: [{ path: '', name: 'TheTerms', component: () => import('@/views/legal/TheTerms.vue') }],
     },
     {
       path: '/privacy',
-      name: 'ThePrivacy',
-      component: () => import('@/views/legal/ThePrivacy.vue'),
+      component: () => import('@/ui/layouts/PublicLayout.vue'),
+      children: [{ path: '', name: 'ThePrivacy', component: () => import('@/views/legal/ThePrivacy.vue') }],
     },
   ],
 })

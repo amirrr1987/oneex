@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import Alert from 'ant-design-vue/es/alert'
 import Button from 'ant-design-vue/es/button'
+import Divider from 'ant-design-vue/es/divider'
+import Flex from 'ant-design-vue/es/flex'
 import Form from 'ant-design-vue/es/form'
 import FormItem from 'ant-design-vue/es/form/FormItem'
 import Input from 'ant-design-vue/es/input'
+import Space from 'ant-design-vue/es/space'
+import Typography from 'ant-design-vue/es/typography'
 import { LoginOutlined, MailOutlined } from '@ant-design/icons-vue'
 import { ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
@@ -13,6 +17,7 @@ import { useZodForm } from '@/composables/useZodForm'
 import { signInSchema } from '@/schemas/auth'
 import { useAuthStore } from '@/stores/auth'
 
+const { Text, Link } = Typography
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
@@ -39,11 +44,8 @@ async function onSubmit() {
 
 <template>
   <Form layout="vertical" @submit.prevent="onSubmit">
-    <FormItem
-      :validate-status="fieldError('email') ? 'error' : undefined"
-      :help="fieldError('email')"
-    >
-      <Input v-model:value="values.email" type="email" placeholder="Enter email">
+    <FormItem label="Email" :validate-status="fieldError('email') ? 'error' : undefined" :help="fieldError('email')">
+      <Input v-model:value="values.email" type="email" placeholder="you@example.com" size="large">
         <template #prefix>
           <MailOutlined />
         </template>
@@ -51,6 +53,7 @@ async function onSubmit() {
     </FormItem>
 
     <FormItem
+      label="Password"
       :validate-status="fieldError('password') ? 'error' : undefined"
       :help="fieldError('password')"
     >
@@ -61,37 +64,36 @@ async function onSubmit() {
       />
     </FormItem>
 
-    <p class="text-sm">
-      Forgot password?
-      <RouterLink to="/reset-password">Reset password</RouterLink>
-    </p>
+    <Flex justify="space-between" align="center">
+      <Link>
+        <RouterLink to="/reset-password">Forgot password?</RouterLink>
+      </Link>
+      <Text type="secondary" class="hidden sm:inline">
+        <RouterLink to="/sign-up">Create account</RouterLink>
+      </Text>
+    </Flex>
 
-    <p class="hidden text-sm sm:block">
-      Not registered yet?
-      <RouterLink to="/sign-up">Create account</RouterLink>
-    </p>
+    <Divider />
 
-    <div class="mx-auto mt-4 w-3/4">
-      <Button type="primary" html-type="submit" block :loading="isSubmitting">
-        <template v-if="!isSubmitting" #icon>
-          <LoginOutlined />
-        </template>
-        Sign in ONEEX
-      </Button>
-    </div>
+    <Button type="primary" html-type="submit" block size="large" :loading="isSubmitting">
+      <template v-if="!isSubmitting" #icon>
+        <LoginOutlined />
+      </template>
+      Sign in ONEEX
+    </Button>
 
-    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon class="mt-3" />
-    <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-3" />
+    <Alert v-if="successMessage" type="success" :message="successMessage" show-icon class="mt-4" />
+    <Alert v-if="errorMessage" type="error" :message="errorMessage" show-icon class="mt-4" />
 
-    <div class="mt-3 text-center sm:hidden">
-      <p class="text-sm">Not registered yet?</p>
-      <RouterLink to="/sign-up" class="mt-2 block">
+    <Space direction="vertical" class="mt-4 w-full sm:hidden" align="center">
+      <Text>Not registered yet?</Text>
+      <RouterLink to="/sign-up" class="w-full">
         <Button block>Create Account</Button>
       </RouterLink>
-    </div>
+    </Space>
 
-    <p class="mt-4 text-center text-sm">
-      Shall you encounter any problems logging in, please contact us at support.oneex.com
-    </p>
+    <Text type="secondary" class="mt-4 block text-center">
+      Need help? Contact support@oneex.com
+    </Text>
   </Form>
 </template>

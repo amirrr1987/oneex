@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import Button from 'ant-design-vue/es/button'
+import Col from 'ant-design-vue/es/col'
+import Divider from 'ant-design-vue/es/divider'
 import Layout from 'ant-design-vue/es/layout'
+import Row from 'ant-design-vue/es/row'
 import Space from 'ant-design-vue/es/space'
 import Typography from 'ant-design-vue/es/typography'
 import {
@@ -22,35 +25,27 @@ import {
 import { RouterLink } from 'vue-router'
 
 const { Footer } = Layout
-const { Text } = Typography
+const { Text, Paragraph } = Typography
 </script>
 
 <template>
-  <Footer class="mt-5 p-0">
-    <div class="py-5">
-      <div class="mx-auto max-w-7xl px-4">
-        <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div class="text-center md:text-right">
-            <Space direction="vertical" :size="4">
-              <span class="flex items-center justify-center gap-2 md:justify-end">
-                <InfoCircleOutlined />About
-              </span>
-              <span class="flex items-center justify-center gap-2 md:justify-end">
-                <SafetyCertificateOutlined />Security
-              </span>
-              <span class="flex items-center justify-center gap-2 md:justify-end">
-                <PercentageOutlined />Fee Structure
-              </span>
-              <span class="flex items-center justify-center gap-2 md:justify-end">
-                <ApiOutlined />API docs
-              </span>
-              <span class="flex items-center justify-center gap-2 md:justify-end">
-                <PhoneOutlined />Support
-              </span>
-            </Space>
-          </div>
+  <Footer class="mt-8">
+    <Divider />
 
-          <div class="hidden items-start justify-center gap-2 md:flex">
+    <div class="mx-auto max-w-7xl px-4 py-6">
+      <Row :gutter="[24, 24]" justify="center">
+        <Col :xs="24" :md="8">
+          <Space direction="vertical" :size="8" class="w-full">
+            <Text><InfoCircleOutlined class="mr-2" />About</Text>
+            <Text><SafetyCertificateOutlined class="mr-2" />Security</Text>
+            <Text><PercentageOutlined class="mr-2" />Fee Structure</Text>
+            <Text><ApiOutlined class="mr-2" />API docs</Text>
+            <Text><PhoneOutlined class="mr-2" />Support</Text>
+          </Space>
+        </Col>
+
+        <Col :xs="24" :md="8" class="text-center">
+          <Space class="hidden md:inline-flex">
             <Button shape="circle" href="#" aria-label="Telegram">
               <template #icon><SendOutlined /></template>
             </Button>
@@ -60,60 +55,55 @@ const { Text } = Typography
             <Button shape="circle" href="#" aria-label="Instagram">
               <template #icon><InstagramOutlined /></template>
             </Button>
-          </div>
+          </Space>
+        </Col>
 
-          <div class="text-center md:text-left">
-            <Space direction="vertical" :size="4">
-              <span class="flex items-center justify-center gap-2 md:justify-start">
-                <FileTextOutlined />Cookie policy
-              </span>
-              <RouterLink to="/terms" class="flex items-center justify-center gap-2 md:justify-start">
-                <FileTextOutlined />Terms of use
-              </RouterLink>
-              <span class="flex items-center justify-center gap-2 md:justify-start">
-                <BankOutlined />CDX
-              </span>
-              <span class="flex items-center justify-center gap-2 md:justify-start">
-                <BookOutlined />Blog
-              </span>
-              <RouterLink to="/privacy" class="flex items-center justify-center gap-2 md:justify-start">
-                <LockOutlined />Privacy
-              </RouterLink>
-            </Space>
-          </div>
-        </div>
+        <Col :xs="24" :md="8">
+          <Space direction="vertical" :size="8" class="w-full">
+            <Text><FileTextOutlined class="mr-2" />Cookie policy</Text>
+            <RouterLink to="/terms">
+              <Text><FileTextOutlined class="mr-2" />Terms of use</Text>
+            </RouterLink>
+            <Text><BankOutlined class="mr-2" />CDX</Text>
+            <Text><BookOutlined class="mr-2" />Blog</Text>
+            <RouterLink to="/privacy">
+              <Text><LockOutlined class="mr-2" />Privacy</Text>
+            </RouterLink>
+          </Space>
+        </Col>
+      </Row>
 
-        <div class="flex justify-center">
-          <div class="w-full max-w-3xl text-center">
-            <address class="mb-2 not-italic">
-              <EnvironmentOutlined class="mr-2" />
-              #88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890
-            </address>
-            <span class="block"><PhoneOutlined class="mr-2" />+9821 88 77 66 55</span>
-            <span class="block"><MailOutlined class="mr-2" />support@oneex.com</span>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Divider />
 
-    <div class="py-3 md:hidden">
-      <Space class="flex w-full justify-center">
-        <Button type="text" href="#" aria-label="Telegram">
-          <template #icon><SendOutlined class="text-xl" /></template>
-        </Button>
-        <Button type="text" href="#" aria-label="WhatsApp">
-          <template #icon><PhoneOutlined class="text-xl" /></template>
-        </Button>
-        <Button type="text" href="#" aria-label="Instagram">
-          <template #icon><InstagramOutlined class="text-xl" /></template>
-        </Button>
+      <Space direction="vertical" class="w-full" align="center" :size="4">
+        <Paragraph class="mb-0 text-center">
+          <EnvironmentOutlined class="mr-2" />
+          #88, No. 55, Alley Alley, Avenue Ave, Tehran, Iran - P.O.Box 12345-67890
+        </Paragraph>
+        <Text><PhoneOutlined class="mr-2" />+9821 88 77 66 55</Text>
+        <Text><MailOutlined class="mr-2" />support@oneex.com</Text>
       </Space>
     </div>
 
-    <div class="py-2 text-center">
-      <Text class="text-sm">
-        <CopyrightOutlined class="mr-1" />Copyright 2018. oneex. All Rights Reserved
-      </Text>
-    </div>
+    <Divider class="md:hidden" />
+
+    <Space class="flex w-full justify-center py-4 md:hidden">
+      <Button type="text" href="#" aria-label="Telegram">
+        <template #icon><SendOutlined /></template>
+      </Button>
+      <Button type="text" href="#" aria-label="WhatsApp">
+        <template #icon><PhoneOutlined /></template>
+      </Button>
+      <Button type="text" href="#" aria-label="Instagram">
+        <template #icon><InstagramOutlined /></template>
+      </Button>
+    </Space>
+
+    <Divider />
+
+    <Text class="block py-4 text-center">
+      <CopyrightOutlined class="mr-1" />
+      Copyright 2018. oneex. All Rights Reserved
+    </Text>
   </Footer>
 </template>

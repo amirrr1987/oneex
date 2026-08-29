@@ -1,19 +1,28 @@
 <script setup lang="ts">
 import Typography from 'ant-design-vue/es/typography'
+import { LockOutlined } from '@ant-design/icons-vue'
 
-const { Title, Paragraph } = Typography
+import { UiPage, UiSection } from '@/ui'
+
+const { Paragraph } = Typography
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl px-4 py-8">
-    <Title :level="2">Privacy Policy</Title>
-    <Paragraph>
-      ONEEX stores account, security, and transaction metadata required to operate a regulated
-      exchange. API credentials use public-key authentication; private signing keys remain with the
-      user.
-    </Paragraph>
-    <Paragraph class="mb-0">
-      Login history and withdrawal activity are retained for fraud prevention and audit purposes.
-    </Paragraph>
-  </div>
+  <UiPage
+    title="Privacy Policy"
+    :icon="LockOutlined"
+    subtitle="How ONEEX handles your personal data"
+    :breadcrumbs="[{ label: 'Home', to: '/' }, { label: 'Privacy Policy' }]"
+  >
+    <UiSection>
+      <Paragraph>
+        ONEEX collects account information required for compliance, security monitoring, and customer
+        support. We do not sell personal data to third parties.
+      </Paragraph>
+      <Paragraph class="mb-0">
+        This demo application stores session data locally in your browser and does not transmit
+        information to a production backend.
+      </Paragraph>
+    </UiSection>
+  </UiPage>
 </template>

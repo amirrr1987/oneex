@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from 'ant-design-vue/es/card'
-import Radio from 'ant-design-vue/es/radio'
-import Spin from 'ant-design-vue/es/spin'
+import Segmented from 'ant-design-vue/es/segmented'
+import Space from 'ant-design-vue/es/space'
 import Typography from 'ant-design-vue/es/typography'
 import { HistoryOutlined } from '@ant-design/icons-vue'
 import { computed, onMounted, ref } from 'vue'
@@ -15,11 +15,11 @@ const trading = useTradingStore()
 const { recentTrades, isLoading } = storeToRefs(trading)
 
 const tabs = [
-  { id: 'active', label: 'Active' },
-  { id: 'filled', label: 'Filled' },
+  { label: 'Active', value: 'active' },
+  { label: 'Filled', value: 'filled' },
 ] as const
 
-const activeTab = ref<(typeof tabs)[number]['id']>('filled')
+const activeTab = ref<(typeof tabs)[number]['value']>('filled')
 
 onMounted(() => {
   if (!recentTrades.value.length) void trading.fetchTradingData()
@@ -27,7 +27,7 @@ onMounted(() => {
 
 const columns = [
   { key: 'id' as const, label: '#' },
-  { key: 'fromTo' as const, label: 'From/To' },
+  { key: 'fromTo' as const, label: 'Pair' },
   { key: 'amount' as const, label: 'Amount' },
   { key: 'type' as const, label: 'Type' },
   { key: 'dateTime' as const, label: 'Date/Time' },
@@ -48,27 +48,21 @@ const rows = computed(() => {
 </script>
 
 <template>
-  <Spin :spinning="isLoading && !recentTrades.length">
-    <Card class="h-full">
-      <template #title>
-        <span class="inline-flex items-center gap-2">
-          <HistoryOutlined />
-          <Title :level="5" class="mb-0">Last 5 Trade</Title>
-        </span>
-      </template>
+  <Card hoverable class="h-full" :loading="isLoading && !recentTrades.length">
+    <template #title>
+      <Space>
+        <HistoryOutlined />
+        <Title :level="5" class="mb-0">Last 5 Trades</Title>
+      </Space>
+    </template>
 
-      <Radio.Group v-model:value="activeTab" button-style="solid" class="mb-3 flex w-full">
-        <Radio.Button
-          v-for="tab in tabs"
-          :key="tab.id"
-          :value="tab.id"
-          class="flex-1 text-center"
-        >
-          {{ tab.label }}
-        </Radio.Button>
-      </Radio.Group>
+    <Segmented v-model:value="activeTab" block :options="[...tabs]" class="mb-4" />
 
-      <SortableTable :columns="columns" :rows="rows" row-key="id" />
-    </Card>
-  </Spin>
+    <SortableTable
+      :columns="columns"
+      :rows="rows"
+      row-key="id"
+      empty-description="No recent trades"
+    />
+  </Card>
 </template>

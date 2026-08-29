@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { RouterView } from 'vue-router'
-import { ConfigProvider } from 'ant-design-vue'
+import { App as AntApp, ConfigProvider, FloatButton } from 'ant-design-vue'
+import { RouterView } from 'vue-router'
+
 import { useConfigProviderStore } from './stores/config-provider.store'
 
 const configProviderStore = useConfigProviderStore()
@@ -8,7 +9,9 @@ const configProviderStore = useConfigProviderStore()
 
 <template>
   <ConfigProvider :theme="configProviderStore.theme">
-    <RouterView />
+    <AntApp>
+      <RouterView />
+      <FloatButton.BackTop />
+    </AntApp>
   </ConfigProvider>
 </template>
-

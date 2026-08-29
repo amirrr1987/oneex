@@ -1,4 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, string | number>">
+import Empty from 'ant-design-vue/es/empty'
 import Table from 'ant-design-vue/es/table'
 import { computed } from 'vue'
 
@@ -9,6 +10,7 @@ const props = defineProps<{
   columns: { key: keyof T & string; label: string; sortable?: boolean }[]
   rows: T[]
   rowKey?: keyof T & string
+  emptyDescription?: string
 }>()
 
 const { sortedRows, toggleSort } = useTableSort<T>(computed(() => props.rows))
@@ -19,7 +21,6 @@ const tableColumns = computed(() =>
     dataIndex: column.key,
     key: column.key,
     customHeaderCell: () => ({
-      class: column.sortable !== false ? 'cursor-pointer' : undefined,
       onClick: () => {
         if (column.sortable !== false) toggleSort(column.key)
       },
@@ -36,10 +37,11 @@ function getRowKey(row: T, index?: number) {
 
 <template>
   <Table
+    v-if="sortedRows.length"
     :columns="tableColumns"
     :data-source="sortedRows"
     :row-key="(row, index) => getRowKey(row as T, index)"
-    size="small"
+    size="middle"
     :pagination="false"
     :scroll="{ x: 'max-content' }"
   >
@@ -49,4 +51,5 @@ function getRowKey(row: T, index?: number) {
       <template v-else>{{ text }}</template>
     </template>
   </Table>
+  <Empty v-else :description="emptyDescription ?? 'No data yet'" />
 </template>
